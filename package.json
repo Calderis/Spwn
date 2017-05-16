@@ -1,15 +1,15 @@
 {
-  "name": "Coloris",
-  "version": "v0.1.24",
-  "description": "A minimal Electron application",
+  "name": "FITN",
+  "version": "v0.1.0",
+  "description": "Fingers In The Nose - Developping and managing project never have been this easier",
   "author": "Remi Wetteren <r.wetteren@gmail.com>",
-  "repository": "https://github.com/Calderis/Coloris-2",
+  "repository": "https://github.com/Calderis/FITN",
   "license": "CC0-1.0",
   "main": "main.js",
   "build": {
-    "appId": "calderis.coloris.app",
+    "appId": "calderis.fitn.app",
     "copyright": "Copyright © 2017 Remi Wetteren",
-    "productName": "Coloris",
+    "productName": "FITN",
     "compression": "store",
     "asar": true,
     "mac": {
