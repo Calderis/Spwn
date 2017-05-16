@@ -1,0 +1,13 @@
+/*styles for home content only*/
+
+.update-notification{
+	position: absolute;
+	top:0;
+	left:0;
+	padding: 20px;
+	button {
+		background-color:red;
+		color:white;
+		outline:none;
+	}
+}
