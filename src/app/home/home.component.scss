@@ -11,3 +11,14 @@
 		outline:none;
 	}
 }
+
+.models{
+	width: 100%;
+	overflow-x: scroll;
+	ul{
+		width:1000%;
+		li{
+			display: inline-block;
+		}
+	}
+}

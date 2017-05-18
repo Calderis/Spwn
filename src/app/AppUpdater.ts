@@ -8,18 +8,18 @@ export default class AppUpdater {
   public version: string;
   public updateAvailable = false;
   public autoUpdater;
-  public notifier:Object = {};
+  public notifier: Object = {};
 
   constructor() {
     if (isDev()) {
       console.log('Auto Update disabled on development mode');
-      return 
+      return;
     }
 
     const platform = os.platform();
     if (platform === 'linux') {
       console.log('Auto Update disabled on linux os');
-      return 
+      return;
     }
 
     this.version = electron.remote.app.getVersion();
@@ -57,9 +57,9 @@ export default class AppUpdater {
     this.autoUpdater.on('update-downloaded', (ev, info) => {
       console.log('update downloaded', ev, info);
       let n = new Notification('Update downloaded. Begin installation;');
-      setTimeout(function() {
-        this.autoUpdater.quitAndInstall();  
-      }, 3000)
+      setTimeout(() => {
+        this.autoUpdater.quitAndInstall();
+      }, 3000);
     });
 
     this.autoUpdater.checkForUpdates();

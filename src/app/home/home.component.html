@@ -1,41 +1,46 @@
 <div>
-  <h1 x-large class="sample-content">Your Content Here and this is the version {{version}}</h1>
-
-  <hr>
-
+  <br>
+  
   <div>
-    For hot module reloading run
-    <pre>npm run start:hmr</pre>
+    <label for="project_name">Create project</label>
+    <input id="project_name" (keyup)="createProject($event)">
   </div>
+  
 
-  <hr>
+  <ul>
+    <li *ngFor="let project of projects">
+      <h1>{{project.name}}</h1>
 
-  <div>
-    <h4>Local State</h4>
-    <h3>Update available : {{available}}</h3>
+      <div>
+        <label for="model_name">Create model</label>
+        <input id="model_name" (keyup)="project.createModel($event)">
+      </div>
 
-    <form (ngSubmit)="submitState(localState.value)" autocomplete="off">
+      <div class="models">
+        <ul>
+          <li *ngFor="let model of project.models">
+            <h4>#{{model.className}}</h4>
+            <textarea rows="4" cols="50" [(ngModel)]="model.structure.json" placeholder="Place your structure here" [disabled]="model.structure.locked" (keyup)="prettyPrint($event)"></textarea>
+            <br>
+            <!-- <button (click)="model.structure.build()" *ngIf="!model.structure.locked">Confirm model</button> -->
+          </li>
+        </ul>
+      </div>
 
-      <input
-      [value]="localState.value"
-      (input)="localState.value = $event.target.value"
-      placeholder="Submit Local State to App State"
-      autofocus>
+      <br>
+      <button *ngFor="let traductor of traductors.list" (click)="project.addTraductor(traductor)">Add {{traductor.name}}</button>
 
-      <button>Submit Value</button>
-    </form>
-    <!--
-        <input type="text" [value]="localState.value" (input)="localState.value = $event.target.value" autofocus>
-        Rather than wiring up two-way data-binding ourselves with [value] and (input)
-        we can use Angular's [(ngModel)] syntax
-        <input type="text" name="textInput" [(ngModel)]="localState.value" autofocus>
-      -->
+      <h5>Traductors</h5>
+      <p *ngFor="let traductor of project.traductors"> > {{traductor.name}}</p>
+      <br>
 
-      <pre>this.localState = {{ localState | json }}</pre>
+      <button (click)="project.build()">Build project</button>
 
-    </div>
+    </li>
+  </ul>
+</div>
 
-  </div>
-  <div class="update-notification" *ngIf="appUpdater != undefined && appUpdater.updateAvailable">
-    <button (click)="updateSoftware()">Update Software</button>
-  </div>
+
+<div class="update-notification" *ngIf="appUpdater != undefined && appUpdater.updateAvailable">
+  <button (click)="updateSoftware()">Update Software</button>
+</div>

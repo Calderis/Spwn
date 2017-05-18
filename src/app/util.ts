@@ -7,14 +7,14 @@ export function isDev() {
 let _log: (...args: any[]) => void
 
 if (isDev()) {
-	_log = function (...args: any[]): void {
-		console.log(args);
+		_log = function (...args: any[]): void {
+			console.log(args);
+		}
+	} else {
+		const log = require('electron-log');
+		_log = log.info.bind(log);
 	}
-} else {
-	const log = require('electron-log');
-	_log = log.info.bind(log);
-}
 
-export function log(...args: any[]): void {
-	_log(args);
+	export function log(...args: any[]): void {
+		_log(args);
 }
