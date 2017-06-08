@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { StorageService } from './storage.service';
 
 import { <§ data.className §> } from '../class/<§ data.name §>';
 
@@ -16,12 +17,48 @@ export class <§ data.className §>Service {
 	private options: RequestOptions;
 	public token: string = "";
 
+	private index: Object = {};
+	private storageService: StorageService = new StorageService();
 
 	constructor (
-		private http: Http,) {
+		private http: Http) {
+		this.index = this.storageService.get('<§ data.plurialName §>_index');
+		if(this.index == null) this.index = {};
 	}
 
-	setHeader(): any {
+	public save(<§ data.name §>: <§ data.className §>): void {
+		let standarName = <§ data.name §>.id.replace(/\s/g, '_');
+		this.storageService.set('<§ data.name §>_' + standarName, <§ data.name §>.toJson());
+		this.index[standarName] = true;
+		this.storageService.set('<§ data.plurialName §>_index', this.index);
+	}
+
+	public delete(<§ data.name §>: <§ data.className §>): void {
+		let standarName = <§ data.name §>.id.replace(/\s/g, '_');
+		this.storageService.delete('<§ data.name §>_' + standarName);
+		delete this.index[standarName];
+		this.storageService.set('<§ data.plurialName §>_index', this.index);
+	}
+
+	public get(<§ data.name §>: <§ data.className §>): any {
+		let standarName = <§ data.name §>.id.replace(/\s/g, '_');
+		return this.storageService.get('<§ data.name §>_' + standarName);
+	}
+
+	public load(): Array<any> {
+		let results = [];
+
+		for(let p in this.index) {
+			let <§ data.name §> = this.storageService.get('<§ data.name §>_' + p);
+			let <§ data.name §>Object = new <§ data.className §>(p);
+			<§ data.name §>Object.toObject(<§ data.name §>);
+			results.push(<§ data.name §>Object);
+		}
+
+		return results;
+	}
+
+	private setHeader(): any {
 		this.headers = new Headers();
 		this.token = this.storageService.get("token");
 		this.headers.append('Accept', 'application/json');
@@ -30,37 +67,34 @@ export class <§ data.className §>Service {
 	}
 
 	// ————— CRUD —————
-	get<§ data.plurialClassName §>(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
+	public get<§ data.plurialClassName §>(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + '<§ data.plurialName §>?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
-		.map((res:Response) => this.dataToModel(res.json()) )
+		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	get<§ data.className §>(id: number, probable: number = 0): Observable<<§ data.className §>> {
+	public get<§ data.className §>(id: number): Observable<<§ data.className §>> {
 		this.setHeader();
-		if(id == 0){
-			return Observable.of(this.new<§ data.className §>(probable))
-		}
 		return this.http.get(this.baseUrl + '<§ data.plurialName §>/' + id + "?include=photos,author,hashtags", this.options)
-		.map((res:Response) => this.convertTo<§ data.className §>(res.json()) )
+		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
-	delete<§ data.className §>(<§ data.name §>: <§ data.className §>): Observable<Object>{
+	public delete<§ data.className §>(<§ data.name §>: <§ data.className §>): Observable<Object>{
 		this.setHeader();
 		return this.http.delete(this.baseUrl + '<§ data.plurialName §>/' + <§ data.name §>.id, this.options)
 		.map((res:Response) => res.json())
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	create<§ data.className §>(<§ data.name §>: <§ data.className §>, files: FileList = null): Observable<<§ data.className §>> {
+	public create<§ data.className §>(<§ data.name §>: <§ data.className §>, files: FileList = null): Observable<<§ data.className §>> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + '<§ data.name §>', this.setContentWithFiles(<§ data.name §>.export_json(false), files), this.options)
-		.map((res:Response) => this.convertTo<§ data.className §>(res.json().data) )
+		return this.http.post(this.baseUrl + '<§ data.name §>', <§ data.name §>.toJson(), this.options)
+		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	update<§ data.className §>(<§ data.name §>: <§ data.className §>, files: FileList = null): Observable<<§ data.className §>> {
+	public update<§ data.className §>(<§ data.name §>: <§ data.className §>, files: FileList = null): Observable<<§ data.className §>> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + '<§ data.plurialName §>/' + <§ data.name §>.id, this.setContentWithFiles(<§ data.name §>.export_json(false), files, true), this.options)
-		.map((res:Response) => this.convertTo<§ data.className §>(res.json()) )
+		return this.http.post(this.baseUrl + '<§ data.plurialName §>/' + <§ data.name §>.id, <§ data.name §>.toJson(), this.options)
+		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 }

@@ -12,6 +12,10 @@ export class Balise {
 		this.body = body;
 		this.data = data;
 
+		// console.log("type", type);
+		// console.log("body", body);
+		// console.log("data", data);
+
 		switch( this.type ) {
 			default:
 				this.content = this.getContent(this.body, this.data);
@@ -31,20 +35,21 @@ export class Balise {
 	private getContent(code: string, data: any): string{
 
 		// Detect Loops
-		// 
+		//
 		// Use to know if there are loop inside the loop and if yes, how many
-		let loopDetected = false;
-		let loopDetect = code.match(/(<§-)|(<-§->)/gm) || [];
-		if(loopDetect.length) loopDetected = true;
-		while(loopDetected){
+		while(code.match(/(<§-)|(<-§->)/gm)){
 			let loopNumber = 0;
 			let depth = 0;
-			for(let i = 1; i < loopDetect.length; i++){
-				if(loopDetect[i] === '<§-') depth++;
-				else depth--;
-				if(depth > 0) loopNumber++;
-				else break;
+			let loopDetect = code.match(/(<§-)|(<-§->)/gm) || [];
+			while(loopDetect.length){
+				if(loopDetect.shift() === '<§-') depth++;
+				else {
+					depth--;
+					loopNumber++;
+				}
+				if(!depth) break;
 			}
+			loopNumber--;
 
 			let loopsZone = code.match(new RegExp('^\\s*(<§-)((.*\\n)+?(\\s)*(<-§->)){' + loopNumber + '}((.*\\n)+?(\\s)*(<-§->))', 'gm')) || [];
 			if(loopsZone[0] == undefined) break;
@@ -52,40 +57,32 @@ export class Balise {
 			let balise = new Balise('loop', loopsZone[0], data);
 			this.childs.push(balise);
 			code = code.replace(loopsZone[0], balise.content);
-
-			loopDetect = code.match(/(<§-)|(<-§->)/gm) || [];
-			if(loopDetect.length) loopDetected = true;
-			else loopDetected = false;
 		}
 
 		// Detect Ifs
-		// 
+		//
 		// Use to know if there are if inside the loop and if yes, how many
-		let ifDetected = false;
-		let ifDetect = code.match(/(<§!)|(<!§!>)/gm) || [];
-		if(ifDetect.length) ifDetected = true;
-		while(ifDetected){
+		while(code.match(/(<§!)|(<!§!>)/gm)){
 			let ifNumber = 0;
 			let depth = 0;
-			for(let i = 1; i < ifDetect.length; i++){
-				if(ifDetect[i] === '<§!') depth++;
-				else depth--;
-				if(depth > 0) ifNumber++;
-				else break;
+			let ifDetect = code.match(/(<§!)|(<!§!>)/gm) || [];
+			while(ifDetect.length){
+				if(ifDetect.shift() === '<§!') depth++;
+				else {
+					depth--;
+					ifNumber++;
+				}
+				if(!depth) break;
 			}
+			ifNumber--;
+
 			let ifsZone = code.match(new RegExp('^\\s*(<§!)((.*\\n)+?(\\s)*(<!§!>)){' + ifNumber + '}((.*\\n)+?(\\s)*(<!§!>))', 'gm')) || [];
 			if(ifsZone[0] == undefined) break;
-			
+
 			let balise = new Balise('if', ifsZone[0], data);
 			this.childs.push(balise);
 			if(balise.content == '') code = code.replace(ifsZone[0] + '\n', '');
 			else code = code.replace(ifsZone[0], balise.content);
-			//
-
-			// Is there others ifs ?
-			ifDetect = code.match(/(<§!)|(<!§!>)/gm) || [];
-			if(ifDetect.length) ifDetected = true;
-			else ifDetected = false;
 		}
 
 		// Detect binds
@@ -110,7 +107,7 @@ export class Balise {
 		let header = template.shift();
 		template.pop();
 		template.pop();
-		template = template.join('');
+		let templateContent: string = template.join('');
 
 		let reference = header.match(/<§-.*->/g)[0].replace(/<§-|->|\s/g, '');
 		let object = header.match(/->.*-§>/g)[0].replace(/->|-§>|\s/g, '');
@@ -122,18 +119,18 @@ export class Balise {
 			for(let i in value) {
 				let newData = {data:data['data'], infos:data['infos'], project:data['project']};
 				newData[object] = value[i];
-				content += this.getContent(template, newData);
+				content += this.getContent(templateContent, newData);
 			}
 		} else { // it's an array
 			for(let i of value) {
 				let newData = {data:data['data'], infos:data['infos'], project:data['project']};
 				newData[object] = i;
-				content += this.getContent(template, newData);
+				content += this.getContent(templateContent, newData);
 			}
 		}
 
 		// Indent due to Spwn tags
-		content = content.replace(/^\t{1}/gm, '');
+		content = content.replace(/^\s{2}/gm, '');
 
 		return content;
 	}
@@ -148,7 +145,7 @@ export class Balise {
 		let header = template.shift();
 		template.pop();
 		template.pop();
-		template = template.join('');
+		let templateContent: string = template.join('');
 
 		let reference = header.match(/<§!.*=/g)[0].replace(/<§!|=|\s|~|\!/g, '');
 		let symbol = header.replace(/<§!\s+(\w*\.?)*\s?|=\s.*!§>/g, '');
@@ -162,11 +159,11 @@ export class Balise {
 			condition = this.extractValue(data, condition);
 		}
 
-		let content = this.getContent(template, data);
+		let content = this.getContent(templateContent, data);
 		content = content.replace(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|(^\s*$)/, '');
 
 		// Indent due to Spwn tags
-		content = content.replace(/^\s{4}/gm, '');
+		content = content.replace(/^\s{2}/gm, '');
 
 		switch(true) {
 			case /~\!/.test(symbol):

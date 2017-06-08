@@ -10,10 +10,10 @@ const <§ data.className §>Schema = new mongoose.Schema({
   
   <§- data.array -> param -§>
     <§ param.name §>: {
-      <§! param.type == 'Object' !§>
-        ref: '<§ param.className §>',
+      <§! param.type.className == 'Object' !§>
+        ref: '<§ param.class.className §>',
       <!§!>
-      type: <§ param.type §>
+      type: <§ param.type.className §>
     },
   <-§->
 

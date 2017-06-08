@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
 import config from '../../config/config';
 import User from '../models/users.model';
+import passwordHash from 'password-hash';
 
 /**
  * Returns jwt token if valid email and password is provided

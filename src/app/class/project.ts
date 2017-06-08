@@ -1,14 +1,13 @@
 import { Model } from './model';
 import { Module } from './module';
-import { ProjectService } from '../services/project.service';
 
 export class Project {
-	public name: string = "";
-	public directory: string = "";
+	public id: string = '';
+	public name: string = '';
+	public image: string = '';
+	public directory: string = '';
 	public models: any = {};
-	public arrayModels: Array<Model> = [];
 	public modules: Array<Module> = [];
-	private projectService = new ProjectService();
 
 	constructor(name: string) {
 		this.name = name;
@@ -56,37 +55,48 @@ export class Project {
 		this.models = {};
 	}
 
-	// ————— Save
-	public save(){
-		this.projectService.save(this);
-	}
-	// ————— EXPORT
-	public toJson() {
-		let json = {
-			name : this.name,
-			models : JSON.stringify(this.models)
-			// modules : JSON.stringify(this.modules)
-		};
-		return json;
-	}
 	public toObject(json: Object) {
 		this.name = json["name"];
 		let models = JSON.parse(json["models"]);
 		this.models = {};
 		for(let model in models){
-			this.models[models[model].name] = new Model(models[model].name, models[model].json);
+			this.models[models[model].name] = new Model(models[model].name);
+		}
+	}
+
+	// ————— EXPORT
+	public toJson() {
+		let json = {
+			name : this.name,
+			image : this.image,
+			models : [],
+			modules : []
+		};
+		for(let model in this.models){
+			json.models.push(this.models[model].toJson());
+		}
+		for(var i = 0; i < this.modules.length; i++){
+			json.modules.push(this.modules[i].toJson());
 		}
 
-		// let modules: Array<any> = [];
-
-		// try{
-		// 	modules = JSON.parse(json["modules"]);
-		// } catch(e){
-		// 	modules = [];
-		// }
-		// this.modules = [];
-		// for(let i = 0; i < modules.length; i++) {
-		// 	this.modules.push(new Model(modules[i].name, models[i].json));
-		// }
+		return json;
+	}
+	public toObject(json: Object): Project{
+		this.id = json["_id"];
+		this.name = json["name"];
+		this.image = json["image"];
+		this.models = [];
+		for(var i = 0; i < json["models"].length; i++){
+			let models = new Model('');
+			models.toObject(json["models"][i]);
+			this.models[models.className] = models;
+		}
+		this.modules = [];
+		for(var i = 0; i < json["modules"].length; i++){
+			let modules = new Module();
+			modules.toObject(json["modules"][i]);
+			this.modules.push(modules);
+		}
+		return this;
 	}
 }

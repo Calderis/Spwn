@@ -11,6 +11,12 @@ import { ProjectDetailsComponent } from './views/projects/project-details/projec
 import { ModuleDetailsComponent } from './views/projects/module-details/module-details.component';
 
 import { AuthService } from './services/auth.service';
+import { ModelService } from './services/model.service';
+import { ModuleService } from './services/module.service';
+import { ParamService } from './services/param.service';
+import { ProjectService } from './services/project.service';
+import { TemplateService } from './services/template.service';
+import { UserService } from './services/user.service';
 
 import { Keyobject } from './pipes/keyObject';
 

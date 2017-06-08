@@ -3,14 +3,14 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { StorageService } from './storage.service';
 
-import { Project } from '../class/project';
+import { Model } from '../class/model';
 
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
-export class ProjectService {
+export class ModelService {
 
 	private baseUrl = 'https://localhost:4040/api/';
 	private headers = new Headers();
@@ -22,37 +22,37 @@ export class ProjectService {
 
 	constructor (
 		private http: Http) {
-		this.index = this.storageService.get('projects_index');
+		this.index = this.storageService.get('models_index');
 		if(this.index == null) this.index = {};
 	}
 
-	public save(project: Project): void {
-		let standarName = project.id.replace(/\s/g, '_');
-		this.storageService.set('project_' + standarName, project.toJson());
+	public save(model: Model): void {
+		let standarName = model.id.replace(/\s/g, '_');
+		this.storageService.set('model_' + standarName, model.toJson());
 		this.index[standarName] = true;
-		this.storageService.set('projects_index', this.index);
+		this.storageService.set('models_index', this.index);
 	}
 
-	public delete(project: Project): void {
-		let standarName = project.id.replace(/\s/g, '_');
-		this.storageService.delete('project_' + standarName);
+	public delete(model: Model): void {
+		let standarName = model.id.replace(/\s/g, '_');
+		this.storageService.delete('model_' + standarName);
 		delete this.index[standarName];
-		this.storageService.set('projects_index', this.index);
+		this.storageService.set('models_index', this.index);
 	}
 
-	public get(project: Project): any {
-		let standarName = project.id.replace(/\s/g, '_');
-		return this.storageService.get('project_' + standarName);
+	public get(model: Model): any {
+		let standarName = model.id.replace(/\s/g, '_');
+		return this.storageService.get('model_' + standarName);
 	}
 
 	public load(): Array<any> {
 		let results = [];
 
 		for(let p in this.index) {
-			let project = this.storageService.get('project_' + p);
-			let projectObject = new Project(p);
-			projectObject.toObject(project);
-			results.push(projectObject);
+			let model = this.storageService.get('model_' + p);
+			let modelObject = new Model(p);
+			modelObject.toObject(model);
+			results.push(modelObject);
 		}
 
 		return results;
@@ -67,33 +67,33 @@ export class ProjectService {
 	}
 
 	// ————— CRUD —————
-	public getProjects(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
+	public getModels(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'projects?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
+		return this.http.get(this.baseUrl + 'models?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public getProject(id: number): Observable<Project> {
+	public getModel(id: number): Observable<Model> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'projects/' + id + "?include=photos,author,hashtags", this.options)
+		return this.http.get(this.baseUrl + 'models/' + id + "?include=photos,author,hashtags", this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
-	public deleteProject(project: Project): Observable<Object>{
+	public deleteModel(model: Model): Observable<Object>{
 		this.setHeader();
-		return this.http.delete(this.baseUrl + 'projects/' + project.id, this.options)
+		return this.http.delete(this.baseUrl + 'models/' + model.id, this.options)
 		.map((res:Response) => res.json())
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public createProject(project: Project, files: FileList = null): Observable<Project> {
+	public createModel(model: Model, files: FileList = null): Observable<Model> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'project', project.toJson(), this.options)
+		return this.http.post(this.baseUrl + 'model', model.toJson(), this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public updateProject(project: Project, files: FileList = null): Observable<Project> {
+	public updateModel(model: Model, files: FileList = null): Observable<Model> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'projects/' + project.id, project.toJson(), this.options)
+		return this.http.post(this.baseUrl + 'models/' + model.id, model.toJson(), this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}

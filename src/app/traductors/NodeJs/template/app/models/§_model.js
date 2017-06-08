@@ -4,7 +4,7 @@ Schema = mongoose.Schema;
 var <§ data.className §>Schema = new Schema({
 <§- data.array -> param -§>
 	<§! param.type == 'Object' !§>
-		<§ param.name §>: { type: Number, ref: '<§ param.className §>' },
+		<§ param.name §>: { type: Number, ref: '<§ param.class.className §>' },
 	<!§!>
 	<§! param.type == 'String' !§>
 		<§ param.name §>: <§ param.type §>,

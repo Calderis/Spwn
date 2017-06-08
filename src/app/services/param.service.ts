@@ -3,14 +3,14 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { StorageService } from './storage.service';
 
-import { Project } from '../class/project';
+import { Param } from '../class/param';
 
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
-export class ProjectService {
+export class ParamService {
 
 	private baseUrl = 'https://localhost:4040/api/';
 	private headers = new Headers();
@@ -22,37 +22,37 @@ export class ProjectService {
 
 	constructor (
 		private http: Http) {
-		this.index = this.storageService.get('projects_index');
+		this.index = this.storageService.get('params_index');
 		if(this.index == null) this.index = {};
 	}
 
-	public save(project: Project): void {
-		let standarName = project.id.replace(/\s/g, '_');
-		this.storageService.set('project_' + standarName, project.toJson());
+	public save(param: Param): void {
+		let standarName = param.id.replace(/\s/g, '_');
+		this.storageService.set('param_' + standarName, param.toJson());
 		this.index[standarName] = true;
-		this.storageService.set('projects_index', this.index);
+		this.storageService.set('params_index', this.index);
 	}
 
-	public delete(project: Project): void {
-		let standarName = project.id.replace(/\s/g, '_');
-		this.storageService.delete('project_' + standarName);
+	public delete(param: Param): void {
+		let standarName = param.id.replace(/\s/g, '_');
+		this.storageService.delete('param_' + standarName);
 		delete this.index[standarName];
-		this.storageService.set('projects_index', this.index);
+		this.storageService.set('params_index', this.index);
 	}
 
-	public get(project: Project): any {
-		let standarName = project.id.replace(/\s/g, '_');
-		return this.storageService.get('project_' + standarName);
+	public get(param: Param): any {
+		let standarName = param.id.replace(/\s/g, '_');
+		return this.storageService.get('param_' + standarName);
 	}
 
 	public load(): Array<any> {
 		let results = [];
 
 		for(let p in this.index) {
-			let project = this.storageService.get('project_' + p);
-			let projectObject = new Project(p);
-			projectObject.toObject(project);
-			results.push(projectObject);
+			let param = this.storageService.get('param_' + p);
+			let paramObject = new Param(p);
+			paramObject.toObject(param);
+			results.push(paramObject);
 		}
 
 		return results;
@@ -67,33 +67,33 @@ export class ProjectService {
 	}
 
 	// ————— CRUD —————
-	public getProjects(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
+	public getParams(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'projects?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
+		return this.http.get(this.baseUrl + 'params?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public getProject(id: number): Observable<Project> {
+	public getParam(id: number): Observable<Param> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'projects/' + id + "?include=photos,author,hashtags", this.options)
+		return this.http.get(this.baseUrl + 'params/' + id + "?include=photos,author,hashtags", this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
-	public deleteProject(project: Project): Observable<Object>{
+	public deleteParam(param: Param): Observable<Object>{
 		this.setHeader();
-		return this.http.delete(this.baseUrl + 'projects/' + project.id, this.options)
+		return this.http.delete(this.baseUrl + 'params/' + param.id, this.options)
 		.map((res:Response) => res.json())
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public createProject(project: Project, files: FileList = null): Observable<Project> {
+	public createParam(param: Param, files: FileList = null): Observable<Param> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'project', project.toJson(), this.options)
+		return this.http.post(this.baseUrl + 'param', param.toJson(), this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public updateProject(project: Project, files: FileList = null): Observable<Project> {
+	public updateParam(param: Param, files: FileList = null): Observable<Param> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'projects/' + project.id, project.toJson(), this.options)
+		return this.http.post(this.baseUrl + 'params/' + param.id, param.toJson(), this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}

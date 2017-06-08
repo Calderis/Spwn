@@ -23,7 +23,17 @@ export class StorageService {
 	public delete(name: string): boolean{
 		let file = name + '.json';
 		let fullpath = path.join(this.dirname, file);
-		fs.unlink(fullpath);
+		fs.unlink(fullpath, function(err){
+			if(err && err.code == 'ENOENT') {
+		        // file doens't exist
+		        console.info("File doesn't exist, won't remove it.");
+		    } else if (err) {
+		        // maybe we don't have enough permission
+		        console.error("Error occurred while trying to remove file");
+		    } else {
+		        console.info(`removed`);
+		    }
+		});
 		return true;
 	}
 	public get(name: string): any {

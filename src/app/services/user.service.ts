@@ -3,14 +3,14 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { StorageService } from './storage.service';
 
-import { Project } from '../class/project';
+import { User } from '../class/user';
 
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
-export class ProjectService {
+export class UserService {
 
 	private baseUrl = 'https://localhost:4040/api/';
 	private headers = new Headers();
@@ -22,37 +22,37 @@ export class ProjectService {
 
 	constructor (
 		private http: Http) {
-		this.index = this.storageService.get('projects_index');
+		this.index = this.storageService.get('users_index');
 		if(this.index == null) this.index = {};
 	}
 
-	public save(project: Project): void {
-		let standarName = project.id.replace(/\s/g, '_');
-		this.storageService.set('project_' + standarName, project.toJson());
+	public save(user: User): void {
+		let standarName = user.id.replace(/\s/g, '_');
+		this.storageService.set('user_' + standarName, user.toJson());
 		this.index[standarName] = true;
-		this.storageService.set('projects_index', this.index);
+		this.storageService.set('users_index', this.index);
 	}
 
-	public delete(project: Project): void {
-		let standarName = project.id.replace(/\s/g, '_');
-		this.storageService.delete('project_' + standarName);
+	public delete(user: User): void {
+		let standarName = user.id.replace(/\s/g, '_');
+		this.storageService.delete('user_' + standarName);
 		delete this.index[standarName];
-		this.storageService.set('projects_index', this.index);
+		this.storageService.set('users_index', this.index);
 	}
 
-	public get(project: Project): any {
-		let standarName = project.id.replace(/\s/g, '_');
-		return this.storageService.get('project_' + standarName);
+	public get(user: User): any {
+		let standarName = user.id.replace(/\s/g, '_');
+		return this.storageService.get('user_' + standarName);
 	}
 
 	public load(): Array<any> {
 		let results = [];
 
 		for(let p in this.index) {
-			let project = this.storageService.get('project_' + p);
-			let projectObject = new Project(p);
-			projectObject.toObject(project);
-			results.push(projectObject);
+			let user = this.storageService.get('user_' + p);
+			let userObject = new User(p);
+			userObject.toObject(user);
+			results.push(userObject);
 		}
 
 		return results;
@@ -67,33 +67,33 @@ export class ProjectService {
 	}
 
 	// ————— CRUD —————
-	public getProjects(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
+	public getUsers(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'projects?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
+		return this.http.get(this.baseUrl + 'users?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public getProject(id: number): Observable<Project> {
+	public getUser(id: number): Observable<User> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'projects/' + id + "?include=photos,author,hashtags", this.options)
+		return this.http.get(this.baseUrl + 'users/' + id + "?include=photos,author,hashtags", this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
-	public deleteProject(project: Project): Observable<Object>{
+	public deleteUser(user: User): Observable<Object>{
 		this.setHeader();
-		return this.http.delete(this.baseUrl + 'projects/' + project.id, this.options)
+		return this.http.delete(this.baseUrl + 'users/' + user.id, this.options)
 		.map((res:Response) => res.json())
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public createProject(project: Project, files: FileList = null): Observable<Project> {
+	public createUser(user: User, files: FileList = null): Observable<User> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'project', project.toJson(), this.options)
+		return this.http.post(this.baseUrl + 'user', user.toJson(), this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public updateProject(project: Project, files: FileList = null): Observable<Project> {
+	public updateUser(user: User, files: FileList = null): Observable<User> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'projects/' + project.id, project.toJson(), this.options)
+		return this.http.post(this.baseUrl + 'users/' + user.id, user.toJson(), this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}

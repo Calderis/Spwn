@@ -22,6 +22,9 @@ export class ProjectsComponent implements OnInit {
     public projectService: ProjectService
     ) {
     this.projects = projectService.load();
+    for(var i = 0; i < this.projects.length; i++){
+      this.projects[i].build();
+    }
   }
 
   public ngOnInit() {
@@ -42,6 +45,18 @@ export class ProjectsComponent implements OnInit {
       return project;
     }
     return false;
+  }
+
+  public saveProject(project: Project): void{
+    project.build();
+    this.projectService.save(project);
+  }
+  public deleteProject(project: Project): void{
+    this.projectService.delete(project);
+    for(var i = 0; i < this.projects.length; i++){
+      this.projects.splice(i, 1);
+    }
+    this.projectSelected = null;
   }
 
 }

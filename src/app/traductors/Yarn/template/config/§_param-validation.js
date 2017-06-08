@@ -24,10 +24,10 @@ export default {
     create<§ model.className §>: {
       body: {
         <§- model.array -> param -§>
-          <§! param.type == 'String' !§>
+          <§! param.type.className == 'String' !§>
             <§ param.name §>: Joi.string().required(),
           <!§!>
-          <§! param.type == 'Number' !§>
+          <§! param.type.className == 'Number' !§>
             <§ param.name §>: Joi.number().required(),
           <!§!>
         <-§->
@@ -38,10 +38,10 @@ export default {
     update<§ model.className §>: {
       body: {
         <§- model.array -> param -§>
-          <§! param.type == 'String' !§>
+          <§! param.type.className == 'String' !§>
             <§ param.name §>: Joi.string().required(),
           <!§!>
-          <§! param.type == 'Number' !§>
+          <§! param.type.className == 'Number' !§>
             <§ param.name §>: Joi.number().required(),
           <!§!>
         <-§->

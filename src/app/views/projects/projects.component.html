@@ -15,8 +15,9 @@
 
   <div *ngIf="projectSelected != null">
   	<h1>{{projectSelected.name}} 
-  		<button (click)="projectSelected.save()">Save</button>
-  		<button (click)="projectSelected = null">Close</button>
+  		<button (click)="saveProject(projectSelected)">Save</button>
+      <button (click)="deleteProject(projectSelected)">Delete</button>
+      <button (click)="projectSelected = null">Close</button>
   	</h1>
   	<project-details [project]="projectSelected"></project-details>
   </div>

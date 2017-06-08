@@ -20,10 +20,10 @@ after((done) => {
 describe('## <§ data.className §> APIs', () => {
   let <§ data.name §> = {
     <§- data.array -> param -§>
-      <§! param.type == 'String' !§>
+      <§! param.type.className == 'String' !§>
         <§ param.name §>: 'initial string',
       <!§!>
-      <§! param.type == 'Number' !§>
+      <§! param.type.className == 'Number' !§>
         <§ param.name §>: 42,
       <!§!>
     <-§->
@@ -75,10 +75,10 @@ describe('## <§ data.className §> APIs', () => {
   describe('# PUT /api/<§ data.plurialName §>/:<§ data.name §>Id', () => {
     it('should update <§ data.name §> details', (done) => {
       <§- data.array -> param -§>
-        <§! param.type == 'String' !§>
+        <§! param.type.className == 'String' !§>
           <§ data.name §>.<§ param.name §> = 'KK';
         <!§!>
-        <§! param.type == 'Number' !§>
+        <§! param.type.className == 'Number' !§>
           <§ data.name §>.<§ param.name §> = 24;
         <!§!>
       <-§->
@@ -89,10 +89,10 @@ describe('## <§ data.className §> APIs', () => {
         .then((res) => {
           
           <§- data.array -> param -§>
-            <§! param.type == 'String' !§>
+            <§! param.type.className == 'String' !§>
               expect(res.body.<§ param.name §>).to.equal('KK');
             <!§!>
-            <§! param.type == 'Number' !§>
+            <§! param.type.className == 'Number' !§>
               expect(res.body.<§ param.name §>).to.equal(24);
             <!§!>
           <-§->
@@ -134,10 +134,10 @@ describe('## <§ data.className §> APIs', () => {
         .expect(httpStatus.OK)
         .then((res) => {
           <§- data.array -> param -§>
-            <§! param.type == 'String' !§>
+            <§! param.type.className == 'String' !§>
               expect(res.body.<§ param.name §>).to.equal('KK');
             <!§!>
-            <§! param.type == 'Number' !§>
+            <§! param.type.className == 'Number' !§>
               expect(res.body.<§ param.name §>).to.equal(24);
             <!§!>
           <-§->

@@ -32,11 +32,12 @@ export class TraductorComponent implements OnInit {
     let data = this.models;
     this.datas = [];
     this.translations = [];
+    for(let d in data) {
+      data[d].build();
+      this.datas.push(data[d])
+    }
     if(this.multiple){
-      for(let d in data) {
-        data[d].build();
-        this.datas.push(data[d])
-      }
+      
       for(var i = 0; i<this.datas.length; i++){
         try {
           let balise = new Balise('body', template, {
