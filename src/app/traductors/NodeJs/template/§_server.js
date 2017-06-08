@@ -17,7 +17,7 @@ var app = express();
 app.set('port', process.env.PORT || 3000)
 
 <§- data -> model -§>
-require('./app/models/<§ model.name §>s');
+require('./app/models/<§ model.plurialName §>');
 <-§->
 
 require('./app/routes')(app);

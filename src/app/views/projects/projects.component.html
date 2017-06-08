@@ -1,0 +1,24 @@
+<div>
+  <br>
+  
+  <div>
+    <label for="project_name">Create project</label>
+    <input id="project_name" (keyup)="createProject($event)">
+  </div>
+  
+
+  <ul>
+    <li *ngFor="let project of projects">
+    	<button (click)="projectSelected = project">Select {{project.name}}</button>
+    </li>
+  </ul>
+
+  <div *ngIf="projectSelected != null">
+  	<h1>{{projectSelected.name}} 
+  		<button (click)="projectSelected.save()">Save</button>
+  		<button (click)="projectSelected = null">Close</button>
+  	</h1>
+  	<project-details [project]="projectSelected"></project-details>
+  </div>
+  
+</div>

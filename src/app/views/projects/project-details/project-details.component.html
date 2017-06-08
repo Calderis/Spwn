@@ -1,0 +1,38 @@
+<div>
+  <div>
+    <label for="model_name">Create model</label>
+    <input id="model_name" (keyup)="createModel($event)">
+  </div>
+
+  <div class="models">
+    <ul>
+      <li *ngFor="let model of arrayOf(project.models)">
+        <h4>#{{model.className}} <button (click)="project.deleteModel(model)">Delete</button></h4>
+        <textarea rows="15" cols="30" [(ngModel)]="model.json" placeholder="Place your structure here" (keyup)="prettyPrint($event)"></textarea>
+        <br>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="!show">
+    <button (click)="show = true">Show traductor</button>
+  </div>
+  <div *ngIf="show">
+    <button (click)="show = false">Hide traductor</button>
+    <traductor [models]="project.models"></traductor>
+  </div>
+
+  <br>
+  <button *ngFor="let language of languages" (click)="project.addModule(language)">Add {{language.name}}</button>
+
+  <h5>Traductors</h5>
+  <div *ngFor="let module of project.modules">
+    <p>{{module.name}}</p>
+    <module-details [module]="module" *ngIf="module.status.translated"></module-details>
+  </div>
+  <br>
+
+  <button (click)="focusDirectory()">Build project</button>
+  <input type="file" id="directory" placeholder="Build project" webkitdirectory directory (change)="build($event)" style="opacity: 0">
+  <!-- project.build() -->
+</div>

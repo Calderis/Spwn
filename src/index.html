@@ -13,24 +13,13 @@
   <!-- Configured Head Tags  -->
   <%= webpackConfig.htmlElements.headTags %>
   <% } %>
-
-  <!-- base url -->
-  <!-- <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>"> -->
-
-
 </head>
-
 <body>
-
-  <app>
-    Loading...
-  </app>
+  <app-root>Loading...</app-root>
 
   <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
   <!-- Webpack Dev Server reload -->
   <script src="/webpack-dev-server.js"></script>
   <% } %>
-
-
 </body>
 </html>

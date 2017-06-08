@@ -2,13 +2,15 @@ var mongoose = require('mongoose'),
 Schema = mongoose.Schema;
 
 var <§ data.className §>Schema = new Schema({
-<§- data.structure.array -> param -§>
-	<§! param.type ~!= '#' !§>
+<§- data.array -> param -§>
+	<§! param.type == 'Object' !§>
+		<§ param.name §>: { type: Number, ref: '<§ param.className §>' },
+	<!§!>
+	<§! param.type == 'String' !§>
 		<§ param.name §>: <§ param.type §>,
 	<!§!>
-
-	<§! param.type ~= '#' !§>
-		<§ param.name §>: { type: Number, ref: '<§ param.className §>' },
+	<§! param.type == 'Number' !§>
+		<§ param.name §>: <§ param.type §>,
 	<!§!>
 <-§->
 });

@@ -59,9 +59,9 @@ const ngcWebpack = require('ngc-webpack');
      */
      entry: {
 
-      'polyfills': './src/polyfills.browser.ts',
-      'main':      AOT ? './src/main.browser.aot.ts' :
-      './src/main.browser.ts'
+      'polyfills': './src/polyfills.ts',
+      'main':      AOT ? './src/main.aot.ts' :
+      './src/main.ts'
 
     },
 

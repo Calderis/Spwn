@@ -1,0 +1,11 @@
+<label for="email">Email</label>
+<input type="text" name="email" [(ngModel)]="email">
+<label for="email">Password</label>
+<input type="password" name="password" [(ngModel)]="password">
+<button (click)="login()">Login</button>
+
+<projects></projects>
+
+<div class="update-notification" *ngIf="appUpdater != undefined && appUpdater.updateAvailable">
+  <button (click)="updateSoftware()">Update Software</button>
+</div>

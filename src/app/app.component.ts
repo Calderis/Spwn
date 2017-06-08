@@ -1,72 +1,28 @@
-/*
- * Angular 2 decorators and services
- */
- import {
-   Component,
-   OnInit,
-   ViewEncapsulation
- } from '@angular/core';
- import { AppState } from './app.service';
+import { Component, OnInit } from '@angular/core';
+import AppUpdater from './AppUpdater';
+import { HomeComponent } from './views/home/home.component';
 
-/*
- * App Component
- * Top Level Component
- */
- @Component({
-   selector: 'app',
-   encapsulation: ViewEncapsulation.None,
-   styleUrls: [
-   './app.component.css'
-   ],
-   template: `
-   <nav>
-   <a [routerLink]=" ['./'] "
-   routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
-   Index
-   </a>
-   <a [routerLink]=" ['./home'] "
-   routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
-   Home
-   </a>
-   <a [routerLink]=" ['./detail'] "
-   routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
-   Detail
-   </a>
-   <a [routerLink]=" ['./barrel'] "
-   routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
-   Barrel
-   </a>
-   <a [routerLink]=" ['./about'] "
-   routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
-   About
-   </a>
-   </nav>
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent implements OnInit {
+	// Set our default values
+	public appUpdater;
+	public notif = {update: false};
 
-   <main>
-   <router-outlet></router-outlet>
-   </main>
-   `
- })
+	constructor() {
+		this.appUpdater = new AppUpdater();
+		setTimeout(() => {
+			this.notif.update = this.appUpdater.updateAvailable;
+		}, 5000);
+	}
 
- export class AppComponent implements OnInit {
-   public angularclassLogo = 'assets/img/angularclass-avatar.png';
-   public name = 'Angular 2 Webpack Starter';
-   public url = 'https://twitter.com/AngularClass';
+	ngOnInit() {
+	}
 
-   constructor(
-     public appState: AppState
-     ) {}
-
-   public ngOnInit() {
-     console.log('Initial App State', this.appState.state);
-   }
-
- }
-
-/*
- * Please review the https://github.com/AngularClass/angular2-examples/ repo for
- * more angular app examples that you may copy/paste
- * (The examples may not be updated as quickly. Please open an issue on github for us to update it)
- * For help or questions please contact us at @AngularClass on twitter
- * or our chat on Slack at https://AngularClass.com/slack-join
- */
+	public updateSoftware() {
+		this.appUpdater.autoUpdater.downloadUpdate();
+	}
+}

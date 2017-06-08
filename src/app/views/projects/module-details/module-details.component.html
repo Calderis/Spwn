@@ -1,0 +1,24 @@
+<h3 (click)="test()">{{module.name}}</h3>
+<label for="name">Name</label>
+<input type="text" name="name" [(ngModel)]="module.name">
+
+<h4>Template</h4>
+<p>{{module._moduleName}}</p>
+<p>{{module.dirname}}</p>
+<label for="port">Port</label>
+<input type="text" name="port" [(ngModel)]="module.port">
+<ul>
+  <li *ngFor="let control of arrayOf(module.controls)">
+    {{control.description}}
+    <button (click)="moduleControle(control)">{{control.name}}</button>
+    <br>
+  </li>
+</ul>
+
+<div *ngFor="let child of module.process">
+	<h6>{{child.instruction}} - <strong *ngIf="child.running">Running</strong> </h6>
+	<button (click)="child.spawn.kill()">Kill</button>
+  <textarea rows="15" cols="30">
+  	{{child.logs}}
+  </textarea>
+</div>

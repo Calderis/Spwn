@@ -25,7 +25,7 @@ exports.update = function(req, res) {
   <§ data.className §>.update({"_id":id}, req.body,
     function (err, numberAffected) {
       if (err) return console.log(err);
-      console.log('Updated %d <§ data.name §>s', numberAffected);
+      console.log('Updated %d <§ data.plurialName §>', numberAffected);
       res.send(202);
     });
 }
@@ -34,16 +34,4 @@ exports.delete = function(req, res){
   <§ data.className §>.remove({'_id':id},function(result) {
     return res.send(result);
   });
-};
-
-exports.import = function(req, res){
-  <§ data.className §>.create(
-    { "name": "Ben", "band": "DJ Code Red", "instrument": "Reason" },
-    { "name": "Mike D.","band": "Kingston Kats", "instrument": "drums" },
-    { "name": "Eric", "band": "Eric", "instrument": "piano" },
-    { "name": "Paul", "band": "The Eyeliner", "instrument": "guitar" }
-    , function (err) {
-      if (err) return console.log(err);
-      return res.send(202);
-    });
 };

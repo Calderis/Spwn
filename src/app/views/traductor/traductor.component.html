@@ -1,0 +1,18 @@
+<div>
+  <input name="options" ng-control="options" type="radio" [value]="true"  [(ngModel)]="multiple">Multiple<br/>
+  <input name="options" ng-control="options" type="radio" [value]="false" [(ngModel)]="multiple">Unique<br/>
+  
+  <textarea rows="15" cols="120" [(ngModel)]="code" (keyup)="translate(code)"></textarea>
+  <button (click)="copyToClipboard(code)">Copy</button>
+  <div *ngIf="!multiple">
+  	<textarea rows="60" cols="120" disabled >{{translation}}</textarea>
+  </div>
+  <div *ngIf="multiple">
+  	<button *ngFor="let data of datas; let i = index" (click)="translationSelected = translations[i]">{{data.className}}</button>
+  	<br>
+    <button (click)="copyToClipboard(translationSelected)">Copy</button>
+    <br>
+  	<textarea rows="60" cols="120" disabled >{{translationSelected}}</textarea>
+  </div>
+  
+</div>
