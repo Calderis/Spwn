@@ -21,5 +21,17 @@
   <!-- Webpack Dev Server reload -->
   <script src="/webpack-dev-server.js"></script>
   <% } %>
+  <script type="text/javascript">
+    // Prevents external files to be loaded into the app
+    document.addEventListener('dragover', function (event) {
+      event.preventDefault();
+      return false;
+    }, false);
+
+    document.addEventListener('drop', function (event) {
+      event.preventDefault();
+      return false;
+    }, false);
+  </script>
 </body>
 </html>

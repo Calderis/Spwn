@@ -12,7 +12,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class ModuleService {
 
-	private baseUrl = 'https://localhost:4040/api/';
+	private baseUrl = 'http://localhost:4040/api/';
 	private headers = new Headers();
 	private options: RequestOptions;
 	public token: string = "";
@@ -27,6 +27,21 @@ export class ModuleService {
 	}
 
 	public save(module: Module): void {
+		if(module.id === undefined) {
+			this.createModule(module).subscribe(
+	            result => {
+	            	module.toObject(result);
+	            	this.saveLocally(module);
+	            }, err => console.log(err));
+		} else {
+			this.updateModule(module).subscribe(
+	            result => {
+	            	module.toObject(result);
+	            	this.saveLocally(module);
+	            }, err => console.log(err));
+		}
+	}
+	public saveLocally(module: Module): void{
 		let standarName = module.id.replace(/\s/g, '_');
 		this.storageService.set('module_' + standarName, module.toJson());
 		this.index[standarName] = true;
@@ -76,25 +91,25 @@ export class ModuleService {
 	public getModule(id: number): Observable<Module> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'modules/' + id + "?include=photos,author,hashtags", this.options)
-		.map((res:Response) => res.json() )
+		.map((res:Response) => new Module(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
 	public deleteModule(module: Module): Observable<Object>{
 		this.setHeader();
 		return this.http.delete(this.baseUrl + 'modules/' + module.id, this.options)
-		.map((res:Response) => res.json())
+		.map((res:Response) => new Module(res.json()))
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public createModule(module: Module, files: FileList = null): Observable<Module> {
+	public createModule(module: Module): Observable<Module> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'module', module.toJson(), this.options)
-		.map((res:Response) => res.json() )
+		return this.http.post(this.baseUrl + 'modules', module.toJson(), this.options)
+		.map((res:Response) => new Module(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public updateModule(module: Module, files: FileList = null): Observable<Module> {
+	public updateModule(module: Module): Observable<Module> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'modules/' + module.id, module.toJson(), this.options)
-		.map((res:Response) => res.json() )
+		return this.http.put(this.baseUrl + 'modules/' + module.id, module.toJson(), this.options)
+		.map((res:Response) => new Module(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 }

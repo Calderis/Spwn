@@ -7,16 +7,19 @@ import APIError from '../helpers/APIError';
  * <§ data.className §> Schema
  */
 const <§ data.className §>Schema = new mongoose.Schema({
-  
   <§- data.array -> param -§>
-    <§ param.name §>: {
-      <§! param.type.className == 'Object' !§>
-        ref: '<§ param.class.className §>',
+    <§! param.type.className == 'Object' !§>
+      <§ param.name §>: { type: mongoose.Schema.ObjectId, ref: '<§ param.class.className §>' },
+    <!§!>
+    <§! param.type.className == 'Array' !§>
+      <§ param.name §>: Array,
+    <!§!>
+    <§! param.type.className =!= 'Object' !§>
+      <§! param.type.className =!= 'Array' !§>
+        <§ param.name §>: <§ param.type.className §>,
       <!§!>
-      type: <§ param.type.className §>
-    },
+    <!§!>
   <-§->
-
   createdAt: {
     type: Date,
     default: Date.now
@@ -47,6 +50,14 @@ const <§ data.className §>Schema = new mongoose.Schema({
    */
   get(id) {
     return this.findById(id)
+    <§- data.array -> param -§>
+      <§! param.type.className == 'Object' !§>
+        .populate('<§ param.class.className §>')
+      <!§!>
+      <§! param.type.className == 'Array' !§>
+        .populate('<§ param.class.className §>')
+      <!§!>
+    <-§->
       .exec()
       .then((<§ data.name §>) => {
         if (<§ data.name §>) {

@@ -5,7 +5,7 @@ export default {
   createUser: {
     body: {
       username: Joi.string().required(),
-      mobileNumber: Joi.string().regex(/^[1-9][0-9]{9}$/).required()
+      password: Joi.string().required()
     }
   },
 
@@ -13,7 +13,7 @@ export default {
   updateUser: {
     body: {
       username: Joi.string().required(),
-      mobileNumber: Joi.string().regex(/^[1-9][0-9]{9}$/).required()
+      password: Joi.string().required()
     },
     params: {
       userId: Joi.string().hex().required()
@@ -37,14 +37,6 @@ export default {
     // UPDATE /api/<§ model.plurialName §>/:<§ model.name §>Id
     update<§ model.className §>: {
       body: {
-        <§- model.array -> param -§>
-          <§! param.type.className == 'String' !§>
-            <§ param.name §>: Joi.string().required(),
-          <!§!>
-          <§! param.type.className == 'Number' !§>
-            <§ param.name §>: Joi.number().required(),
-          <!§!>
-        <-§->
       },
       params: {
         <§ model.name §>Id: Joi.string().hex().required()

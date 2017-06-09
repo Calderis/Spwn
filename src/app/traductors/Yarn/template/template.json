@@ -1,9 +1,9 @@
- {
+{
+	"name": "Yarn",
+	"type": "API",
+	"description": "Yarn",
 
-	"name" : "Yarn", // Name of your language
-	"type" : "API", // Type of your language
-	"_moduleName" : "Yarn", // Name of your language
-	// Here are list of instructions that need to be executed after code is compiling
+
 	"installs": [{
 		"type": "command",
 		"command": {
@@ -23,7 +23,8 @@
 			"args": [".env.example", ".env"]
 		}
 	}],
-	// Here are commands used to manage you project
+
+
 	"controls": [{
 		"name": "Start Server",
 		"description": "Start Server",
@@ -46,7 +47,7 @@
 			"args": ["test"]
 		}
 	},
-	// ————— TESTS —————
+
 	{
 		"name": "Run tests",
 		"description": "Run test along with code coverage",
@@ -69,7 +70,7 @@
 			"args": ["test:check-coverage"]
 		}
 	},
-	// ————— LINT —————
+
 	{
 		"name": "Lint code",
 		"description": "Lint code with ESLint",
@@ -85,7 +86,7 @@
 			"args": ["lint:watch"]
 		}
 	},
-	// ————— GULP TASKS —————
+
 	{
 		"name": "Gulp clean",
 		"description": "Wipe out dist and coverage directory",
@@ -101,7 +102,7 @@
 			"args": []
 		}
 	},
-	// ————— DEPLOYMENT —————
+
 	{
 		"name": "Build",
 		"description": "compile to ES5",
@@ -132,10 +133,10 @@
 		}
 	}],
 
-	// List of templates that need to be translated
+
 	"templates": [{
-			"template": "server/routes/§_index.route.js", // Which template
-			"type": "unique" // Unique or multiple. Multiple mean that each model will have it's own file
+			"template": "server/routes/§_index.route.js",
+			"type": "unique"
 		},{
 			"template": "config/§_param-validation.js",
 			"type": "unique"
@@ -151,5 +152,5 @@
 		},{
 			"template": "server/controllers/§_controller.controller.js",
 			"type": "multiple"
-	}],
+	}]
 }

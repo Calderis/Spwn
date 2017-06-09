@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { StorageService } from './storage.service';
+import * as fs from 'fs';
+import * as $ from 'jquery';
+import * as http from 'http';
+import * as FormData from 'form-data';
 
 import { Template } from '../class/template';
 
@@ -12,7 +16,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class TemplateService {
 
-	private baseUrl = 'https://localhost:4040/api/';
+	private baseUrl = 'http://localhost:4040/api/';
 	private headers = new Headers();
 	private options: RequestOptions;
 	public token: string = "";
@@ -27,6 +31,21 @@ export class TemplateService {
 	}
 
 	public save(template: Template): void {
+		if(template.id === undefined) {
+			this.createTemplate(template).subscribe(
+	            result => {
+	            	template.toObject(result);
+	            	this.saveLocally(template);
+	            }, err => console.log(err));
+		} else {
+			this.updateTemplate(template).subscribe(
+	            result => {
+	            	template.toObject(result);
+	            	this.saveLocally(template);
+	            }, err => console.log(err));
+		}
+	}
+	public saveLocally(template: Template): void{
 		let standarName = template.id.replace(/\s/g, '_');
 		this.storageService.set('template_' + standarName, template.toJson());
 		this.index[standarName] = true;
@@ -76,25 +95,54 @@ export class TemplateService {
 	public getTemplate(id: number): Observable<Template> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'templates/' + id + "?include=photos,author,hashtags", this.options)
-		.map((res:Response) => res.json() )
+		.map((res:Response) => new Template(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
 	public deleteTemplate(template: Template): Observable<Object>{
 		this.setHeader();
 		return this.http.delete(this.baseUrl + 'templates/' + template.id, this.options)
-		.map((res:Response) => res.json())
+		.map((res:Response) => new Template(res.json()))
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public createTemplate(template: Template, files: FileList = null): Observable<Template> {
+	public createTemplate(template: Template): Observable<Template> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'template', template.toJson(), this.options)
-		.map((res:Response) => res.json() )
-		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+		return this.http.post(this.baseUrl + 'templates', template.toJson(), this.options)
+		.map((res:Response) => new Template(res.json()) )
+		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
-	public updateTemplate(template: Template, files: FileList = null): Observable<Template> {
+	public uploadTemplate(template: Template, file: string): Observable<Template> {
+		this.headers = new Headers();
+		this.headers.append('content-type', 'multipart/form-data');
+		this.headers.append('Authorization', 'Bearer ' + this.storageService.get("token") );
+		this.options = new RequestOptions({ headers: this.headers });
+
+		let formData = new FormData();
+		formData.append('template', fs.createReadStream(file));
+
+		var http = require('http');
+
+		var request = http.request({
+		  method: 'post',
+		  host: 'localhost',
+		  port: 4040,
+		  path: '/api/templates/file',
+		  headers: formData.getHeaders()
+		});
+
+		formData.pipe(request);
+
+		request.on('response', function(res) {
+		  console.log(res);
+		});
+
+		// return this.http.post(this.baseUrl + 'templates/file', formData, this.options)
+		// .map((res:Response) => res )
+		// .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+	}
+	public updateTemplate(template: Template): Observable<Template> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'templates/' + template.id, template.toJson(), this.options)
-		.map((res:Response) => res.json() )
+		return this.http.put(this.baseUrl + 'templates/' + template.id, template.toJson(), this.options)
+		.map((res:Response) => new Template(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 }

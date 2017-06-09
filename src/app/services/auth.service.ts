@@ -28,8 +28,10 @@ export class AuthService {
 	public save(log: any): void {
 		let standarName = log.user.id.replace(/\s/g, '_');
 		this.storageService.set('auth_' + standarName, {token: log.token, user: log.user.toJson()});
+		this.index = {}; // Reset old accounts
 		this.index[standarName] = true;
 		this.storageService.set('auth_index', this.index);
+		this.storageService.set('token', log.token);
 	}
 
 	public delete(user: User): void {
@@ -42,25 +44,24 @@ export class AuthService {
 	public get(user: User): any {
 		let standarName = user.id.replace(/\s/g, '_');
 		let result = this.storageService.get('auth_' + standarName);
-		let user = new User();
-		console.log(result.user);
-		return {token: result.token, user: user.toObject(result.user)});
+		let userData = this.storageService.get('user_' + standarName);
+		return {token: result.token, user: new User(userData)});
 	}
 
 	public load(): Array<User> {
 		let results = [];
 
 		for(let p in this.index) {
-			let user = this.storageService.get('auth_' + p);
-			results.push(user);
+			let session = this.storageService.get('auth_' + p);
+			let userData = this.storageService.get('user_' + p);
+			results.push({token: session.token, user: new User(userData)});
 		}
 
 		return results;
 	}
 
 	private saveLogguedUser(token: string, user: any): any{
-		let newUser = new User();
-		newUser.toObject(user);
+		let newUser = new User(user);
 		let result = {token: token, user: newUser};
 		this.save(result);
 		return result; 

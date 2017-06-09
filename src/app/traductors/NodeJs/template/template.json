@@ -1,7 +1,8 @@
 {
 	"name" : "NodeJs", // Name of your language
-	"type" : "API", // Type of your language
-	"_moduleName" : "NodeJs", // Name of your language
+	"type" : "API", // Type of your template: API | Mobile | Static
+	"description" : "API", // Type of your language
+	
 	// Here are list of instructions that need to be executed after code is compiling
 	"installs": [{
 		"type": "command",

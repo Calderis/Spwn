@@ -14,8 +14,9 @@ export class Model {
 	public body: Object = {};
 	public array: Array<Params> = [];
 
-	constructor(name: string = '') {
-		this.setData(name);
+	constructor(name: string = '', model: Object = null) {
+		if(model) this.toObject(model);
+		else this.setData(name);
 	}
 
 	private setData(name: string = ''): void{
@@ -39,13 +40,13 @@ export class Model {
 				let param = new Param();
 				param.name = index;
 
-				if(typeof value === 'string'){
+				if(value === 'string'){
 					param.type = 'String';
 					param.classname = value;
-				} else if(value.length === 'boolean') {
+				} else if(value === 'boolean') {
 					param.type = 'Boolean';
 					param.classname = value.model;
-				} else if(value.length === 'number') {
+				} else if(value === 'number') {
 					param.type = 'Number';
 					param.classname = value.model;
 				} else if(value.length === undefined) {
@@ -66,7 +67,8 @@ export class Model {
 	}
 
 	private normName(name: string): any{
-		let value = name.toLowerCase();
+		if(name === undefined) let value = '';
+		else let value = name.toLowerCase();
 		let Value = value.charAt(0).toUpperCase() + value.slice(1);
 		return {
     		name: value,
@@ -88,7 +90,7 @@ export class Model {
 		for(var i = 0; i < this.params.length; i++){
 			let param = this.params[i];
 			if(param.type === 'String' || param.type === 'Boolean' || param.type === 'Number'){
-				json[param.name] = param.type;
+				json[param.name] = param.type.toLowerCase();
 			} else if(param.type === 'Array'){
 				json[param.name] = [{model:param.classname}]
 			} else if(param.type === 'Object'){
@@ -130,6 +132,7 @@ export class Model {
 	// ————— EXPORT
 	public toJson(): any {
 		let json = {
+			_id : this.id,
 			name : this.name,
 			params : [],
 			description : this.description
@@ -141,7 +144,8 @@ export class Model {
 		return json;
 	}
 	public toObject(json: Object): Model {
-		this.id = json["_id"];
+		if(json["_id"] != undefined) this.id = json["_id"];
+		if(json["id"] != undefined) this.id = json["id"];
 		this.setData(json["name"]);
 		this.params = [];
 		for(var i = 0; i < json["params"].length; i++){
@@ -150,6 +154,7 @@ export class Model {
 			this.params.push(params);
 		}
 		this.description = json["description"];
+		this.build();
 		return this;
 	}
 }

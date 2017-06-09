@@ -9,8 +9,9 @@ export class Project {
 	public models: any = {};
 	public modules: Array<Module> = [];
 
-	constructor(name: string) {
-		this.name = name;
+	constructor(name: string, project: Object = null) {
+		if(project) this.toObject(project);
+		else this.name = name;
 	}
 
 	// ————— MODELS —————
@@ -45,9 +46,11 @@ export class Project {
 			let model = this.models[m];
 			model = model.build();
 		}
-		for(let i = 0; i < this.modules.length; i++) {
-			this.modules[i].setOutput(this.directory);
-			this.modules[i].build();
+		if(directory){
+			for(let i = 0; i < this.modules.length; i++) {
+				this.modules[i].setOutput(this.directory);
+				this.modules[i].build();
+			}
 		}
 		return true;
 	}
@@ -67,6 +70,7 @@ export class Project {
 	// ————— EXPORT
 	public toJson() {
 		let json = {
+			_id : this.id,
 			name : this.name,
 			image : this.image,
 			models : [],
@@ -82,19 +86,18 @@ export class Project {
 		return json;
 	}
 	public toObject(json: Object): Project{
-		this.id = json["_id"];
+		if(json["_id"] != undefined) this.id = json["_id"];
+		if(json["id"] != undefined) this.id = json["id"];
 		this.name = json["name"];
 		this.image = json["image"];
 		this.models = [];
 		for(var i = 0; i < json["models"].length; i++){
-			let models = new Model('');
-			models.toObject(json["models"][i]);
+			let models = new Model('', json["models"][i]);
 			this.models[models.className] = models;
 		}
 		this.modules = [];
 		for(var i = 0; i < json["modules"].length; i++){
-			let modules = new Module();
-			modules.toObject(json["modules"][i]);
+			let modules = new Module(json["modules"][i]);
 			this.modules.push(modules);
 		}
 		return this;

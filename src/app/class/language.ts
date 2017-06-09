@@ -9,6 +9,12 @@ import { FileService } from '../services/files.service';
 
 export class Language extends Module {
 
+	public name: string = ''; // Name of your language
+	public type: string = ''; // Type of your language
+	public installs: Array<any> = [];
+	public controls: Array<any> = [];
+	public templates: Array<any> = [];
+
 	private files: FileService = null;
 	public dirname: string = '.';
     public output: string = '';
@@ -27,13 +33,17 @@ export class Language extends Module {
 
     // Function that will be called by the programm.
     public build(){
+    	if(this.dirname === '.') {
+    		console.log('(Language %s) No dirname specified', this.name);
+    		return false;
+    	}
         this.compilFiles(this.templates);
         this.install();
         this.status.translated = true;
     }
 
 	public buildFromTemplate(dir: string, template: string, type: string = 'unique', data: any): boolean{
-		console.log('————————————————— %s ———————————————————', template);
+		// console.log('————————————————— %s ———————————————————', template);
 		if(type === 'multiple') {
 			for(let d in data) {
 				let file = data[d].plurialName + '.' + template.split('.').pop();
@@ -56,7 +66,7 @@ export class Language extends Module {
             infos: this.informations,
             project: this.project
         });
-        console.log(balise);
+        // console.log(balise);
 		return balise.content;
 	}
 
@@ -67,7 +77,6 @@ export class Language extends Module {
 		for(let model in this.project.models){
 			models.push(this.project.models[model]);
 		}
-		console.log(models);
 		for(let i = 0; i < f.length; i++) {
 			this.buildFromTemplate(this.dirname + '/template/', f[i].template, f[i].type, models);
 		}

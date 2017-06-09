@@ -12,7 +12,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class ProjectService {
 
-	private baseUrl = 'https://localhost:4040/api/';
+	private baseUrl = 'http://localhost:4040/api/';
 	private headers = new Headers();
 	private options: RequestOptions;
 	public token: string = "";
@@ -27,6 +27,21 @@ export class ProjectService {
 	}
 
 	public save(project: Project): void {
+		if(project.id === undefined) {
+			this.createProject(project).subscribe(
+	            result => {
+	            	project.toObject(result);
+	            	this.saveLocally(project);
+	            }, err => console.log(err));
+		} else {
+			this.updateProject(project).subscribe(
+	            result => {
+	            	project.toObject(result);
+	            	this.saveLocally(project);
+	            }, err => console.log(err));
+		}
+	}
+	public saveLocally(project: Project): void{
 		let standarName = project.id.replace(/\s/g, '_');
 		this.storageService.set('project_' + standarName, project.toJson());
 		this.index[standarName] = true;
@@ -76,25 +91,25 @@ export class ProjectService {
 	public getProject(id: number): Observable<Project> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'projects/' + id + "?include=photos,author,hashtags", this.options)
-		.map((res:Response) => res.json() )
+		.map((res:Response) => new Project(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
 	public deleteProject(project: Project): Observable<Object>{
 		this.setHeader();
 		return this.http.delete(this.baseUrl + 'projects/' + project.id, this.options)
-		.map((res:Response) => res.json())
+		.map((res:Response) => new Project(res.json()))
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public createProject(project: Project, files: FileList = null): Observable<Project> {
+	public createProject(project: Project): Observable<Project> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'project', project.toJson(), this.options)
-		.map((res:Response) => res.json() )
+		return this.http.post(this.baseUrl + 'projects', project.toJson(), this.options)
+		.map((res:Response) => new Project(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public updateProject(project: Project, files: FileList = null): Observable<Project> {
+	public updateProject(project: Project): Observable<Project> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'projects/' + project.id, project.toJson(), this.options)
-		.map((res:Response) => res.json() )
+		return this.http.put(this.baseUrl + 'projects/' + project.id, project.toJson(), this.options)
+		.map((res:Response) => new Project(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 }

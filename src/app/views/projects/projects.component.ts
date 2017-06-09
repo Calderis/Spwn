@@ -1,30 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
-import { ProjectService } from '../../services/project.service';
+import { UserService } from '../../services/user.service';
 import { StorageService } from '../../services/storage.service';
 
 import { Project } from '../../class/project';
+import { User } from '../../class/user';
 
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 
 @Component({
   selector: 'projects',
-  providers: [ProjectService, StorageService],
+  providers: [UserService, StorageService],
   styleUrls: [ './projects.component.scss' ],
   templateUrl: './projects.component.html'
 })
 export class ProjectsComponent implements OnInit {
 
+  @Input() session: User;
   public projectSelected: Project = null;
-  public projects: Array<Project> = [];
 
   constructor(
-    public projectService: ProjectService
+    public userService: UserService
     ) {
-    this.projects = projectService.load();
-    for(var i = 0; i < this.projects.length; i++){
-      this.projects[i].build();
-    }
+    if(this.session === null || this.session === undefined) this.session = new User();
+      for(var i = 0; i < this.session.projects.length; i++){
+        this.session.projects[i].build(null);
+      }
   }
 
   public ngOnInit() {
@@ -36,11 +37,9 @@ export class ProjectsComponent implements OnInit {
     if (event.key === 'Enter') {
       // Create project
       let project = new Project(event.target.value);
-      this.projects.push(project);
+      this.session.projects.push(project);
       // Reset input value
       event.srcElement.value = '';
-      // Log projet
-      console.log('Create project', project);
 
       return project;
     }
@@ -48,15 +47,16 @@ export class ProjectsComponent implements OnInit {
   }
 
   public saveProject(project: Project): void{
-    project.build();
-    this.projectService.save(project);
+    console.log(project);
+    project.build(false);
+    this.userService.save(this.session);
   }
   public deleteProject(project: Project): void{
-    this.projectService.delete(project);
-    for(var i = 0; i < this.projects.length; i++){
-      this.projects.splice(i, 1);
+    for(var i = 0; i < this.session.projects.length; i++){
+      this.session.projects.splice(i, 1);
     }
     this.projectSelected = null;
+    this.userService.save(this.session);
   }
 
 }

@@ -29,7 +29,8 @@ export class Module {
     // Here are commands used to install your project
     public installs: Array<any> = [];
 
-	constructor(project: Project = null) {
+	constructor(project: Project = null, module: Object = null) {
+		if(module) this.toObject(module);
 		this.project = project;
 		this.fileService = new FileService();
 	}
@@ -85,6 +86,7 @@ export class Module {
 	// ————— EXPORT
 	public toJson() {
 		let json = {
+			_id : this.id,
 			name : this.name,
 			status : this.status,
 			template : this.template.toJson()
@@ -93,7 +95,8 @@ export class Module {
 		return json;
 	}
 	public toObject(json: Object) {
-		this.id = json["_id"];
+		if(json["_id"] != undefined) this.id = json["_id"];
+		if(json["id"] != undefined) this.id = json["id"];
 		this.name = json["name"];
 		this.status = json["status"];
 		

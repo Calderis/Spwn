@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as electron from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as archiver from 'archiver';
 
 @Injectable()
 export class FileService {
@@ -110,6 +111,45 @@ export class FileService {
 	            });
 	        });
 	    });
+	}
+
+	// Create Archive .zip froms files
+	// content: {
+	// 	files: [],
+	// 	folders: []
+	// }
+	// Return path to Zip file
+	public createArchive(name: string, content: any, next: any){
+		let dirname = path.resolve(electron.remote.app.getPath('userData') + '/files/');
+		var output = fs.createWriteStream(dirname + '/' + name + '.zip');
+		var archive = archiver('zip', {
+		    zlib: { level: 9 } // Sets the compression level.
+		});
+
+		// listen for all archive data to be written
+		output.on('close', function() {
+		  console.log(archive.pointer() + ' total bytes');
+		  console.log('archiver has been finalized and the output file descriptor has closed.');
+		  next(dirname + '/' + name + '.zip');
+		});
+
+		// good practice to catch this error explicitly
+		archive.on('error', function(err) {
+		  throw err;
+		});
+
+		// pipe archive data to the file
+		archive.pipe(output);
+
+		for(var i = 0; i < content.files.length; i++){
+			archive.file(content.files[i].path, { name: content.files[i].name });
+		}
+		for(var i = 0; i < content.folders.length; i++){
+			archive.directory(content.folders[i].path + '/', content.folders[i].name);
+		}
+
+		// finalize the archive (ie we are done appending files but streams have to finish yet)
+		archive.finalize();
 	}
 
 }

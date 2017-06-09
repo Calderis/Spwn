@@ -12,7 +12,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class UserService {
 
-	private baseUrl = 'https://localhost:4040/api/';
+	private baseUrl = 'http://localhost:4040/api/';
 	private headers = new Headers();
 	private options: RequestOptions;
 	public token: string = "";
@@ -27,6 +27,22 @@ export class UserService {
 	}
 
 	public save(user: User): void {
+		// this.saveLocally(user);
+		if(user.id === undefined) {
+			this.createUser(user).subscribe(
+	            result => {
+	            	user.toObject(result);
+	            	this.saveLocally(user);
+	            }, err => console.log(err));
+		} else {
+			this.updateUser(user).subscribe(
+	            result => {
+	            	user.toObject(result);
+	            	this.saveLocally(user);
+	            }, err => console.log(err));
+		}
+	}
+	public saveLocally(user: User): void{
 		let standarName = user.id.replace(/\s/g, '_');
 		this.storageService.set('user_' + standarName, user.toJson());
 		this.index[standarName] = true;
@@ -70,31 +86,38 @@ export class UserService {
 	public getUsers(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'users?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
-		.map((res:Response) => res.json() )
+		.map((res:Response) => {
+			let results = res.json();
+			for(var i = 0; i < results.length; i++){
+				results[i] = new User(results[i]);
+			}
+			results
+		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 	public getUser(id: number): Observable<User> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'users/' + id + "?include=photos,author,hashtags", this.options)
-		.map((res:Response) => res.json() )
+		.map((res:Response) => new User(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
 	public deleteUser(user: User): Observable<Object>{
 		this.setHeader();
 		return this.http.delete(this.baseUrl + 'users/' + user.id, this.options)
-		.map((res:Response) => res.json())
+		.map((res:Response) => new User(res.json()))
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public createUser(user: User, files: FileList = null): Observable<User> {
+	public createUser(user: User): Observable<User> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'user', user.toJson(), this.options)
-		.map((res:Response) => res.json() )
+		return this.http.post(this.baseUrl + 'users', user.toJson(), this.options)
+		.map((res:Response) => new User(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public updateUser(user: User, files: FileList = null): Observable<User> {
+	public updateUser(user: User): Observable<User> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'users/' + user.id, user.toJson(), this.options)
-		.map((res:Response) => res.json() )
+		let json = user.toJson();
+		return this.http.put(this.baseUrl + 'users/' + user.id, user.toJson(), this.options)
+		.map((res:Response) => new User(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 }

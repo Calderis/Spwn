@@ -12,7 +12,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class ModelService {
 
-	private baseUrl = 'https://localhost:4040/api/';
+	private baseUrl = 'http://localhost:4040/api/';
 	private headers = new Headers();
 	private options: RequestOptions;
 	public token: string = "";
@@ -27,6 +27,21 @@ export class ModelService {
 	}
 
 	public save(model: Model): void {
+		if(model.id === undefined) {
+			this.createModel(model).subscribe(
+	            result => {
+	            	model.toObject(result);
+	            	this.saveLocally(model);
+	            }, err => console.log(err));
+		} else {
+			this.updateModel(model).subscribe(
+	            result => {
+	            	model.toObject(result);
+	            	this.saveLocally(model);
+	            }, err => console.log(err));
+		}
+	}
+	public saveLocally(model: Model): void{
 		let standarName = model.id.replace(/\s/g, '_');
 		this.storageService.set('model_' + standarName, model.toJson());
 		this.index[standarName] = true;
@@ -76,25 +91,25 @@ export class ModelService {
 	public getModel(id: number): Observable<Model> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'models/' + id + "?include=photos,author,hashtags", this.options)
-		.map((res:Response) => res.json() )
+		.map((res:Response) => new Model(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
 	public deleteModel(model: Model): Observable<Object>{
 		this.setHeader();
 		return this.http.delete(this.baseUrl + 'models/' + model.id, this.options)
-		.map((res:Response) => res.json())
+		.map((res:Response) => new Model(res.json()))
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public createModel(model: Model, files: FileList = null): Observable<Model> {
+	public createModel(model: Model): Observable<Model> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'model', model.toJson(), this.options)
-		.map((res:Response) => res.json() )
+		return this.http.post(this.baseUrl + 'models', model.toJson(), this.options)
+		.map((res:Response) => new Model(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public updateModel(model: Model, files: FileList = null): Observable<Model> {
+	public updateModel(model: Model): Observable<Model> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'models/' + model.id, model.toJson(), this.options)
-		.map((res:Response) => res.json() )
+		return this.http.put(this.baseUrl + 'models/' + model.id, model.toJson(), this.options)
+		.map((res:Response) => new Model(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 }

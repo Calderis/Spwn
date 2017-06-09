@@ -12,7 +12,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class ParamService {
 
-	private baseUrl = 'https://localhost:4040/api/';
+	private baseUrl = 'http://localhost:4040/api/';
 	private headers = new Headers();
 	private options: RequestOptions;
 	public token: string = "";
@@ -27,6 +27,21 @@ export class ParamService {
 	}
 
 	public save(param: Param): void {
+		if(param.id === undefined) {
+			this.createParam(param).subscribe(
+	            result => {
+	            	param.toObject(result);
+	            	this.saveLocally(param);
+	            }, err => console.log(err));
+		} else {
+			this.updateParam(param).subscribe(
+	            result => {
+	            	param.toObject(result);
+	            	this.saveLocally(param);
+	            }, err => console.log(err));
+		}
+	}
+	public saveLocally(param: Param): void{
 		let standarName = param.id.replace(/\s/g, '_');
 		this.storageService.set('param_' + standarName, param.toJson());
 		this.index[standarName] = true;
@@ -76,25 +91,25 @@ export class ParamService {
 	public getParam(id: number): Observable<Param> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'params/' + id + "?include=photos,author,hashtags", this.options)
-		.map((res:Response) => res.json() )
+		.map((res:Response) => new Param(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
 	public deleteParam(param: Param): Observable<Object>{
 		this.setHeader();
 		return this.http.delete(this.baseUrl + 'params/' + param.id, this.options)
-		.map((res:Response) => res.json())
+		.map((res:Response) => new Param(res.json()))
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public createParam(param: Param, files: FileList = null): Observable<Param> {
+	public createParam(param: Param): Observable<Param> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'param', param.toJson(), this.options)
-		.map((res:Response) => res.json() )
+		return this.http.post(this.baseUrl + 'params', param.toJson(), this.options)
+		.map((res:Response) => new Param(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public updateParam(param: Param, files: FileList = null): Observable<Param> {
+	public updateParam(param: Param): Observable<Param> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + 'params/' + param.id, param.toJson(), this.options)
-		.map((res:Response) => res.json() )
+		return this.http.put(this.baseUrl + 'params/' + param.id, param.toJson(), this.options)
+		.map((res:Response) => new Param(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 }

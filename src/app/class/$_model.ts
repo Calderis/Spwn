@@ -26,12 +26,15 @@ export class <§ data.className §> {
 			public <§ param.name §>: <§ param.type.name §>;
 		<!§!>
   	<-§->
-	constructor() {
+	constructor(<§ data.name §>: Object = null) {
+		if(<§ data.name §>) this.toObject(<§ data.name §>);
 	}
 
 	// ————— EXPORT
 	public toJson() {
 		let json = {
+			_id : this.id,
+			id : this.id,
 			<§- data.array -> param -§>
 				<§! param.type.className =!= 'Object' !§>
 					<§! param.type.className =!= 'Array' !§>
@@ -56,7 +59,8 @@ export class <§ data.className §> {
 		return json;
 	}
 	public toObject(json: Object) {
-		this.id = json["_id"];
+		if(json["_id"] != undefined) this.id = json["_id"];
+		if(json["id"] != undefined) this.id = json["id"];
 		<§- data.array -> param -§>
 			<§! param.type.className =!= 'Object' !§>
 				<§! param.type.className =!= 'Array' !§>

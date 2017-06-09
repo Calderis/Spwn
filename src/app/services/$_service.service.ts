@@ -12,7 +12,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class <§ data.className §>Service {
 
-	private baseUrl = 'https://localhost:4040/api/';
+	private baseUrl = 'http://localhost:4040/api/';
 	private headers = new Headers();
 	private options: RequestOptions;
 	public token: string = "";
@@ -27,6 +27,21 @@ export class <§ data.className §>Service {
 	}
 
 	public save(<§ data.name §>: <§ data.className §>): void {
+		if(<§ data.name §>.id === undefined) {
+			this.create<§ data.className §>(<§ data.name §>).subscribe(
+	            result => {
+	            	<§ data.name §>.toObject(result);
+	            	this.saveLocally(<§ data.name §>);
+	            }, err => console.log(err));
+		} else {
+			this.update<§ data.className §>(<§ data.name §>).subscribe(
+	            result => {
+	            	<§ data.name §>.toObject(result);
+	            	this.saveLocally(<§ data.name §>);
+	            }, err => console.log(err));
+		}
+	}
+	public saveLocally(<§ data.name §>: <§ data.className §>): void{
 		let standarName = <§ data.name §>.id.replace(/\s/g, '_');
 		this.storageService.set('<§ data.name §>_' + standarName, <§ data.name §>.toJson());
 		this.index[standarName] = true;
@@ -85,13 +100,13 @@ export class <§ data.className §>Service {
 		.map((res:Response) => res.json())
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public create<§ data.className §>(<§ data.name §>: <§ data.className §>, files: FileList = null): Observable<<§ data.className §>> {
+	public create<§ data.className §>(<§ data.name §>: <§ data.className §>): Observable<<§ data.className §>> {
 		this.setHeader();
-		return this.http.post(this.baseUrl + '<§ data.name §>', <§ data.name §>.toJson(), this.options)
+		return this.http.post(this.baseUrl + '<§ data.plurialName §>', <§ data.name §>.toJson(), this.options)
 		.map((res:Response) => res.json() )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public update<§ data.className §>(<§ data.name §>: <§ data.className §>, files: FileList = null): Observable<<§ data.className §>> {
+	public update<§ data.className §>(<§ data.name §>: <§ data.className §>): Observable<<§ data.className §>> {
 		this.setHeader();
 		return this.http.post(this.baseUrl + '<§ data.plurialName §>/' + <§ data.name §>.id, <§ data.name §>.toJson(), this.options)
 		.map((res:Response) => res.json() )
