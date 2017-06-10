@@ -23,7 +23,11 @@
   </div>
 
   <br>
-  <button *ngFor="let language of languages" (click)="project.addModule(language)">Add {{language.name}}</button>
+  <!-- <button *ngFor="let language of languages" (click)="project.addModule(language)">Add {{language.name}}</button> -->
+  Your templates <br>
+  <button *ngFor="let template of ownTemplates" (click)="downloadTemplate(template)">{{template.name}}</button>
+  Templates <br>
+  <button *ngFor="let template of templates" (click)="downloadTemplate(template)">{{template.name}}</button>
 
   <h5>Traductors</h5>
   <div *ngFor="let module of project.modules">

@@ -21,7 +21,9 @@ export class HomeComponent implements OnInit {
 	public email: string = "";
 	public password: string = "";
 
-	public session: any = null
+	public session: any = null;
+	public ownTemplates: Array<Template> = [];
+	public templates: Array<Template> = [];
 
 	constructor(
 		private authService: AuthService,
@@ -37,6 +39,7 @@ export class HomeComponent implements OnInit {
             },
             err => console.log(err)
             );
+            
 		}
 	}
 

@@ -3,6 +3,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { StorageService } from './storage.service';
 
+import { Template } from '../class/template';
 import { User } from '../class/user';
 
 // Import RxJs required methods
@@ -91,13 +92,13 @@ export class UserService {
 			for(var i = 0; i < results.length; i++){
 				results[i] = new User(results[i]);
 			}
-			results
+			return results
 		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 	public getUser(id: number): Observable<User> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'users/' + id + "?include=photos,author,hashtags", this.options)
+		return this.http.get(this.baseUrl + 'users/' + id, this.options)
 		.map((res:Response) => new User(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
@@ -119,5 +120,17 @@ export class UserService {
 		return this.http.put(this.baseUrl + 'users/' + user.id, user.toJson(), this.options)
 		.map((res:Response) => new User(res.json()) )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+	}
+	public getTemplates(id: number): Observable<Template> {
+		this.setHeader();
+		return this.http.get(this.baseUrl + 'templates?owner=' + id, this.options)
+		.map((res:Response) => {
+			let results = res.json();
+			for(var i = 0; i < results.length; i++){
+				results[i] = new Template(results[i]);
+			}
+			return results
+		} )
+		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
 }

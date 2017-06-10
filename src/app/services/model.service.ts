@@ -84,13 +84,19 @@ export class ModelService {
 	// ————— CRUD —————
 	public getModels(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'models?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
-		.map((res:Response) => res.json() )
+		return this.http.get(this.baseUrl + 'models?page=' + page + '&limit=' + limit + params, this.options)
+		.map((res:Response) => {
+			let results = res.json();
+			for(var i = 0; i < results.length; i++){
+				results[i] = new Model(results[i]);
+			}
+			return results
+		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 	public getModel(id: number): Observable<Model> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'models/' + id + "?include=photos,author,hashtags", this.options)
+		return this.http.get(this.baseUrl + 'models/' + id, this.options)
 		.map((res:Response) => new Model(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}

@@ -84,13 +84,19 @@ export class ParamService {
 	// ————— CRUD —————
 	public getParams(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'params?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
-		.map((res:Response) => res.json() )
+		return this.http.get(this.baseUrl + 'params?page=' + page + '&limit=' + limit + params, this.options)
+		.map((res:Response) => {
+			let results = res.json();
+			for(var i = 0; i < results.length; i++){
+				results[i] = new Param(results[i]);
+			}
+			return results
+		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 	public getParam(id: number): Observable<Param> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'params/' + id + "?include=photos,author,hashtags", this.options)
+		return this.http.get(this.baseUrl + 'params/' + id, this.options)
 		.map((res:Response) => new Param(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}

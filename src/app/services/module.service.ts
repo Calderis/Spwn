@@ -84,13 +84,19 @@ export class ModuleService {
 	// ————— CRUD —————
 	public getModules(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'modules?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
-		.map((res:Response) => res.json() )
+		return this.http.get(this.baseUrl + 'modules?page=' + page + '&limit=' + limit + params, this.options)
+		.map((res:Response) => {
+			let results = res.json();
+			for(var i = 0; i < results.length; i++){
+				results[i] = new Module(results[i]);
+			}
+			return results
+		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 	public getModule(id: number): Observable<Module> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'modules/' + id + "?include=photos,author,hashtags", this.options)
+		return this.http.get(this.baseUrl + 'modules/' + id, this.options)
 		.map((res:Response) => new Module(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}

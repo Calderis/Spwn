@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { StorageService } from './storage.service';
+import { FileService } from './file.service';
 import * as fs from 'fs';
+import * as path from 'path';
 import * as $ from 'jquery';
 import * as http from 'http';
 import * as FormData from 'form-data';
+import * as AdmZip from 'adm-zip';
 
 import { Template } from '../class/template';
 
@@ -88,13 +91,19 @@ export class TemplateService {
 	// ————— CRUD —————
 	public getTemplates(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'templates?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
-		.map((res:Response) => res.json() )
+		return this.http.get(this.baseUrl + 'templates?page=' + page + '&limit=' + limit + params, this.options)
+		.map((res:Response) => {
+			let results = res.json();
+			for(var i = 0; i < results.length; i++){
+				results[i] = new Template(results[i]);
+			}
+			return results
+		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 	public getTemplate(id: number): Observable<Template> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'templates/' + id + "?include=photos,author,hashtags", this.options)
+		return this.http.get(this.baseUrl + 'templates/' + id, this.options)
 		.map((res:Response) => new Template(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
@@ -138,6 +147,13 @@ export class TemplateService {
 		// return this.http.post(this.baseUrl + 'templates/file', formData, this.options)
 		// .map((res:Response) => res )
 		// .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+	}
+	public downloadTemplate(id: number): Observable<Template> {
+
+		this.setHeader();
+		return this.http.get(this.baseUrl + 'templates/file/' + id, this.options)
+		.map((res:Response) => res)
+		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
 	public updateTemplate(template: Template): Observable<Template> {
 		this.setHeader();

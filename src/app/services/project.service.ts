@@ -84,13 +84,19 @@ export class ProjectService {
 	// ————— CRUD —————
 	public getProjects(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'projects?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
-		.map((res:Response) => res.json() )
+		return this.http.get(this.baseUrl + 'projects?page=' + page + '&limit=' + limit + params, this.options)
+		.map((res:Response) => {
+			let results = res.json();
+			for(var i = 0; i < results.length; i++){
+				results[i] = new Project(results[i]);
+			}
+			return results
+		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 	public getProject(id: number): Observable<Project> {
 		this.setHeader();
-		return this.http.get(this.baseUrl + 'projects/' + id + "?include=photos,author,hashtags", this.options)
+		return this.http.get(this.baseUrl + 'projects/' + id, this.options)
 		.map((res:Response) => new Project(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}

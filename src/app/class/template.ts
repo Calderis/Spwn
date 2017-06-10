@@ -39,8 +39,7 @@ export class Template {
 		this.name = json["name"];
 		this.description = json["description"];
 		this.used = json["used"];
-	  	let owner = new User();
-	  	owner.toObject(json["owner"]);
+	  	let owner = new User(json["owner"]);
 		this.owner = owner;
 		this.stared = json["stared"];
 		this.indexed = json["indexed"];
