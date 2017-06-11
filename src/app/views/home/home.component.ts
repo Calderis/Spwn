@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { FileService } from '../../services/files.service';
 import { UserService } from '../../services/user.service';
 import { TemplateService } from '../../services/template.service';
+import { TerminalService } from '../../services/terminal.service';
 
 import { Template } from '../../class/template';
 
@@ -14,7 +15,7 @@ import * as fs from 'fs';
   selector: 'home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [AuthService, FileService, UserService, TemplateService]
+  providers: [AuthService, FileService, UserService, TemplateService, TerminalService]
 })
 export class HomeComponent implements OnInit {
 
@@ -25,10 +26,13 @@ export class HomeComponent implements OnInit {
 	public ownTemplates: Array<Template> = [];
 	public templates: Array<Template> = [];
 
+	public child: any;
+
 	constructor(
 		private authService: AuthService,
 		private fileService: FileService,
 		private templateService: TemplateService,
+		private terminal: TerminalService,
 		private userService: UserService) {
 		let sessions = this.authService.load();
 		if(sessions.length > 0) {
@@ -36,6 +40,7 @@ export class HomeComponent implements OnInit {
 			this.userService.getUser(this.session.user.id).subscribe(
             result => {
               	this.session.user = result;
+              	console.log(this.session);
             },
             err => console.log(err)
             );
@@ -44,6 +49,15 @@ export class HomeComponent implements OnInit {
 	}
 
 	ngOnInit() {
+	}
+
+	//
+	// Create new project
+	public sendChild(event: any) {
+		if (event.key === 'Enter') {
+		  	this.child.write(event.target.value + '\r');
+		}
+		return false;
 	}
 
 	public uploadTemplate(ev: Event){
@@ -85,11 +99,7 @@ export class HomeComponent implements OnInit {
 		this.templateService.createTemplate(template).subscribe(
             template => {
             	this.fileService.createArchive(template.id, {files: [], folders: [folder]}, (zipPath) => {
-	            	this.templateService.uploadTemplate(template, zipPath)
-	            	// .subscribe(
-	            	// 	result => {
-			           //  	console.log(result);
-			           //  }, err => console.log(err));
+	            	this.templateService.uploadTemplate(template, zipPath);
             	});
             }, err => console.log(err));
 	}
@@ -97,7 +107,9 @@ export class HomeComponent implements OnInit {
 	public login(): void{
 		this.authService.login(this.email, this.password).subscribe(
             result => {
-              this.session = result;
+             	this.session = result;
+             	this.userService.save(this.session.user);
+             	console.log(this.session);
             },
             err => console.log(err)
             );

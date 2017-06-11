@@ -22,7 +22,7 @@ export class User {
 	}
 
 	// ————— EXPORT
-	public toJson() {
+	public toJson(full: boolean = true) {
 		let json = {
 			_id : this.id,
 			firstname : this.firstname,
@@ -38,11 +38,13 @@ export class User {
 			projects : [],
 			favoris : []
 		};
-		for(var i = 0; i < this.projects.length; i++){
-			json.projects.push(this.projects[i].toJson());
-		}
-		for(var i = 0; i < this.favoris.length; i++){
-			json.favoris.push(this.favoris[i].toJson());
+		if(full){
+			for(var i = 0; i < this.projects.length; i++){
+				json.projects.push(this.projects[i].toJson());
+			}
+			for(var i = 0; i < this.favoris.length; i++){
+				json.favoris.push(this.favoris[i].toJson());
+			}
 		}
 
 		return json;
@@ -63,16 +65,15 @@ export class User {
 		this.projects = [];
 		if(json["projects"] !== undefined){
 			for(var i = 0; i < json["projects"].length; i++){
-				let projects = new Project();
-				projects.toObject(json["projects"][i]);
+				let projects = new Project('', json["projects"][i]);
+				projects.owner = this;
 				this.projects.push(projects);
 			}
 		}
 		this.favoris = [];
 		if(json["favoris"] !== undefined){
 			for(var i = 0; i < json["favoris"].length; i++){
-				let favoris = new Template();
-				favoris.toObject(json["favoris"][i]);
+				let favoris = new Template(json["favoris"][i]);
 				this.favoris.push(favoris);
 			}
 		}

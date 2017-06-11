@@ -13,7 +13,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class UserService {
 
-	private baseUrl = 'http://localhost:4040/api/';
+	private baseUrl = 'http://151.80.141.50:4040/api/';
 	private headers = new Headers();
 	private options: RequestOptions;
 	public token: string = "";
@@ -32,13 +32,11 @@ export class UserService {
 		if(user.id === undefined) {
 			this.createUser(user).subscribe(
 	            result => {
-	            	user.toObject(result);
 	            	this.saveLocally(user);
 	            }, err => console.log(err));
 		} else {
 			this.updateUser(user).subscribe(
 	            result => {
-	            	user.toObject(result);
 	            	this.saveLocally(user);
 	            }, err => console.log(err));
 		}
@@ -116,9 +114,12 @@ export class UserService {
 	}
 	public updateUser(user: User): Observable<User> {
 		this.setHeader();
-		let json = user.toJson();
 		return this.http.put(this.baseUrl + 'users/' + user.id, user.toJson(), this.options)
-		.map((res:Response) => new User(res.json()) )
+		.map((res:Response) => {
+			let user = new User(res.json());
+			console.log(user);
+			return user
+		})
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
 	public getTemplates(id: number): Observable<Template> {

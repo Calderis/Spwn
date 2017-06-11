@@ -12,7 +12,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class AuthService {
 
-	private baseUrl = 'http://localhost:4040/api/auth';
+	private baseUrl = 'http://151.80.141.50:4040/api/auth';
 	private headers = new Headers();
 	private options: RequestOptions;
 	public token: string = "";
@@ -61,6 +61,7 @@ export class AuthService {
 	}
 
 	private saveLogguedUser(token: string, user: any): any{
+		console.log(user);
 		let newUser = new User(user);
 		let result = {token: token, user: newUser};
 		this.save(result);

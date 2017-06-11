@@ -106,7 +106,11 @@ const ngcWebpack = require('ngc-webpack');
          * See: https://github.com/TheLarkInn/angular2-template-loader
          * See: https://github.com/shlomiassaf/ng-router-loader
          */
-         {
+         { 
+          test: /\.node$/,
+          loader: 'node-loader'
+        },
+        {
           test: /\.ts$/,
           use: [
           {

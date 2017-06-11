@@ -1,5 +1,6 @@
 import { Model } from './model';
 import { Module } from './module';
+import { Language } from './language';
 
 export class Project {
 	public id: string = '';
@@ -7,7 +8,7 @@ export class Project {
 	public image: string = '';
 	public directory: string = '';
 	public models: any = {};
-	public modules: Array<Module> = [];
+	public modules: Array<Language> = [];
 
 	constructor(name: string, project: Object = null) {
 		if(project) this.toObject(project);
@@ -25,11 +26,11 @@ export class Project {
 	}
 
 	// ————— Modules —————
-	public addModule(language: Module): void{
+	public addModule(language: Language): void{
 		language.project = this;
 		this.modules.push(language);
 	}
-	public deleteModule(module: Module): boolean{
+	public deleteModule(module: Language): boolean{
 		for(let i = 0; i < this.modules.length; i++) {
 			if(this.modules[i] == module) {
 				this.modules.splice(i, 1);
@@ -41,6 +42,7 @@ export class Project {
 
 	// ————— PROJECT COMPILING
 	public build(directory: string) {
+		console.log('—————————————————————————————————————————————————— PROJECT BUILD', this);
 		this.directory = directory;
 		for(let m in this.models){
 			let model = this.models[m];
@@ -73,6 +75,7 @@ export class Project {
 			_id : this.id,
 			name : this.name,
 			image : this.image,
+			directory : this.directory,
 			models : [],
 			modules : []
 		};
@@ -90,6 +93,7 @@ export class Project {
 		if(json["id"] != undefined) this.id = json["id"];
 		this.name = json["name"];
 		this.image = json["image"];
+		this.directory = json["directory"];
 		this.models = [];
 		for(var i = 0; i < json["models"].length; i++){
 			let models = new Model('', json["models"][i]);
@@ -97,7 +101,8 @@ export class Project {
 		}
 		this.modules = [];
 		for(var i = 0; i < json["modules"].length; i++){
-			let modules = new Module(json["modules"][i]);
+			let modules = new Language(json["modules"][i]);
+			modules.project = this;
 			this.modules.push(modules);
 		}
 		return this;

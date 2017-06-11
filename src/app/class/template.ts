@@ -24,7 +24,7 @@ export class Template {
 			name : this.name,
 			description : this.description,
 			used : this.used,
-			owner : this.owner.toJson(),
+			owner : this.owner.toJson(false),
 			stared : this.stared,
 			indexed : this.indexed,
 			validated : this.validated,

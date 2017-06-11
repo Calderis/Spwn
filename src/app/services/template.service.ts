@@ -19,7 +19,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class TemplateService {
 
-	private baseUrl = 'http://localhost:4040/api/';
+	private baseUrl = 'http://151.80.141.50:4040/api/';
 	private headers = new Headers();
 	private options: RequestOptions;
 	public token: string = "";
@@ -120,22 +120,20 @@ export class TemplateService {
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
 	public uploadTemplate(template: Template, file: string): Observable<Template> {
-		this.headers = new Headers();
-		this.headers.append('content-type', 'multipart/form-data');
-		this.headers.append('Authorization', 'Bearer ' + this.storageService.get("token") );
-		this.options = new RequestOptions({ headers: this.headers });
-
 		let formData = new FormData();
 		formData.append('template', fs.createReadStream(file));
 
 		var http = require('http');
 
+		let headers = formData.getHeaders();
+		headers.Authorization = 'Bearer ' + this.storageService.get("token");
+
 		var request = http.request({
 		  method: 'post',
-		  host: 'localhost',
+		  host: '151.80.141.50',
 		  port: 4040,
 		  path: '/api/templates/file',
-		  headers: formData.getHeaders()
+		  headers: headers
 		});
 
 		formData.pipe(request);

@@ -13,6 +13,13 @@
     <button (click)="moduleControle(control)">{{control.name}}</button>
     <br>
   </li>
+  <li>
+    <button (click)="module.deploy()">Deploy</button>
+    <h1 *ngIf="module.status.deployed">DEPLOYED !</h1>
+  </li>
+  <li>
+    <button (click)="module.online = !module.online">Switch local/online</button> {{module.online}}
+  </li>
 </ul>
 
 <div *ngFor="let child of module.process">

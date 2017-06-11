@@ -3,13 +3,16 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Project } from '../../../class/project';
 import { Model } from '../../../class/model';
 import { User } from '../../../class/user';
-import { Registry } from '../../../traductors/registry';
+import { Language } from '../../../class/language';
 
 import { ModuleDetailsComponent } from '../module-details/module-details.component';
 import { TemplateService } from '../../../services/template.service';
 import { FileService } from '../../../services/files.service';
 import { UserService } from '../../../services/user.service';
+
+import * as path from 'path';
 import * as fs from 'fs';
+import * as unzip from 'unzip-stream';
 
 import 'rxjs/Rx' ;
 
@@ -23,7 +26,6 @@ export class ProjectDetailsComponent implements OnInit {
 
 	@Input() project: Project;
 	@Input() session: User;
-	public languages = new Registry();
 	public show: boolean = false;
 
 	constructor(
@@ -33,7 +35,6 @@ export class ProjectDetailsComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		console.log(this.session);
 		this.userService.getTemplates(this.session.id).subscribe(
             results => {
               	this.ownTemplates = results;
@@ -69,7 +70,6 @@ export class ProjectDetailsComponent implements OnInit {
 	}
 
 	public focusDirectory(): void {
-		console.log("ok", document.getElementById("directory"));
 		document.getElementById("directory").click();
 	}
 
@@ -79,6 +79,8 @@ export class ProjectDetailsComponent implements OnInit {
         let files: FileList = target.files;
 
         this.project.build(files[0].path);
+
+        this.userService.save(this.session);
 	}
 
 	// Create new project
@@ -91,28 +93,33 @@ export class ProjectDetailsComponent implements OnInit {
 
 	// Download template
 	public downloadTemplate(template: Template): void{
-		console.log(template);
-		this.filesService.download('http://localhost:4040/api/templates/file/' + template.id, '/Users/remiwetteren/Projects/Hetic/Spwn/');
-		// .subscribe(
-	 //        file => {
-	 //        	var reader = new FileReader();
-	 //        	var blob = new Blob([file], { type: 'application/zip' });
-	 //        	reader.readAsDataURL(blob);
-	 //        	console.log(blob);
-	 //        	var url = window.URL.createObjectURL(blob);
-	 //        	console.log(url);
-  // 				// window.open(url);
-  // 				reader.onloadend = function (e) {
-  // 					console.log(reader.result);
-  // 					// var imageBuffer = new Buffer(reader.result, 'base64');
-  // 					// fs.writeFile('/Users/remiwetteren/Projects/Hetic/Spwn/monZipTest.zip', imageBuffer, function(err) {
-  // 					// });
-  // 					window.location.href = reader.result;
-		// 		        // window.open(reader.result, 'Excel', 'width=20,height=10,toolbar=0,menubar=0,scrollbars=no');
-		// 		  }
-	 //        },
-	 //        err => console.log(err)
-	 //        );
+		this.filesService.download('http://localhost:4040/api/templates/file/' + template.id, '/template/', (folderPath) =>{
+			fs.createReadStream(folderPath + template.id + '.zip')
+				.pipe(unzip.Extract({ path: folderPath }))
+				.on('end', () => {
+					setTimeout(() => {
+						// Rename /template folder get after extracting to template id
+						let defaultFolder = path.resolve(folderPath + '/template');
+						let folderName = path.resolve(folderPath + '/' + template.id);
+						// If template has already been downloaded, we delete it (the previous version)
+						if (fs.existsSync(folderName)) {
+							this.filesService.deleteFolderRecursive(folderName);
+						}
+						fs.renameSync(defaultFolder, folderName, function(err) {
+						    if ( err ) console.log('ERROR: ' + err);
+						});
+						// Delete zip and default folder
+						this.filesService.deleteFile(folderPath, template.id + '.zip');
+						let infos = JSON.parse(fs.readFileSync(folderName + '/template.json', {encoding: 'utf8'}));
+						let language = new Language(infos);
+						language.id = template.id;
+						language.template = template;
+						language.dirname = folderName;
+						this.project.addModule(language);
+					}, 1000)
+				})
+				.on('error', e => console.log('error',e));
+		});
 	}
 }
 

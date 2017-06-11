@@ -53,6 +53,7 @@ export class FileService {
 	    //check if folder needs to be created or integrated
 	    let targetFolder = path.join( target, path.basename( source ) );
 	    if ( !fs.existsSync( targetFolder ) ) {
+	    	console.log('Create folder', targetFolder);
 	        fs.mkdirSync( targetFolder );
 	    }
 
@@ -70,7 +71,21 @@ export class FileService {
 	    }
 	}
 
-	public deleteFile(dir, file) {
+	public deleteFolderRecursive(dir): void {
+	  if( fs.existsSync(dir) ) {
+	    fs.readdirSync(dir).forEach((file,index) => {
+	      var curPath = dir + "/" + file;
+	      if(fs.lstatSync(curPath).isDirectory()) { // recurse
+	        this.deleteFolderRecursive(curPath);
+	      } else { // delete file
+	        fs.unlinkSync(curPath);
+	      }
+	    });
+	    fs.rmdirSync(dir);
+	  }
+	};
+
+	public deleteFile(dir, file): void {
 	    return new Promise((resolve, reject) => {
 	        let filePath = path.join(dir, file);
 	        fs.lstat(filePath, (err, stats) => {
@@ -91,7 +106,7 @@ export class FileService {
 	    });
 	}
 
-	public deleteDirectory(dir) {
+	public deleteDirectory(dir): void {
 	    return new Promise((resolve, reject) => {
 	        fs.access(dir, (err) => {
 	            if (err) {
@@ -155,35 +170,27 @@ export class FileService {
 		archive.finalize();
 	}
 
-	public download(file_url: string, output: string){
-		// We will be downloading the files to a directory, so make sure it's there
-		// This step is not required if you have manually created the directory
-		var mkdir = 'mkdir -p ' + output;
-		var child = exec(mkdir, function(err, stdout, stderr) {
-		    if (err) throw err;
-		    else download_file_httpget(file_url);
-		});
-
-		// Function to download file using HTTP.get
-		var download_file_httpget = function(file_url) {
-			var options = {
-			    host: 'localhost',
-			    port: 4040,
-			    path: url.parse(file_url).pathname
-			};
-
-			var file_name = url.parse(file_url).pathname.split('/').pop() + '.zip';
-			var file = fs.createWriteStream(output + file_name);
-
-			http.get(options, function(res) {
-		    	res.on('data', function(data) {
-		            file.write(data);
-		        }).on('end', function() {
-		            file.end();
-		            console.log(file_name + ' downloaded to ' + output);
-		        });
-		    });
+	public download(file_url: string, output: string, next: any){
+		output =  path.resolve(electron.remote.app.getPath('userData') + output) + '/';
+		this.ensureDirectoryExistence(output);
+		
+		var options = {
+		    host: '151.80.141.50',
+		    port: 4040,
+		    path: url.parse(file_url).pathname
 		};
+
+		var file_name = url.parse(file_url).pathname.split('/').pop() + '.zip';
+		var file = fs.createWriteStream(output + file_name);
+
+		http.get(options, function(res) {
+	    	res.on('data', function(data) {
+	            file.write(data);
+	        }).on('end', function() {
+	            file.end();
+	            next(output);
+	        });
+	    });
 	}
 
 }

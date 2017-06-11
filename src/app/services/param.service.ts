@@ -12,7 +12,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class ParamService {
 
-	private baseUrl = 'http://localhost:4040/api/';
+	private baseUrl = 'http://151.80.141.50:4040/api/';
 	private headers = new Headers();
 	private options: RequestOptions;
 	public token: string = "";

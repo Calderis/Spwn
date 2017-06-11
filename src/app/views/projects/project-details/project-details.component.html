@@ -31,6 +31,7 @@
 
   <h5>Traductors</h5>
   <div *ngFor="let module of project.modules">
+    <p>Added : </p> <button (click)="project.deleteModule(module)">x</button>
     <p>{{module.name}}</p>
     <module-details [module]="module" *ngIf="module.status.translated"></module-details>
   </div>

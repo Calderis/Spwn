@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { spawn, exec } from 'child_process';
 
 import { Project } from './project';
 import { Balise } from './balise';
@@ -13,7 +12,7 @@ export class Language extends Module {
 	public type: string = ''; // Type of your language
 	public installs: Array<any> = [];
 	public controls: Array<any> = [];
-	public templates: Array<any> = [];
+	public templates: Array<any> = []; // List of templates that need to be translated
 
 	private files: FileService = null;
 	public dirname: string = '.';
@@ -23,11 +22,9 @@ export class Language extends Module {
     // List of informations you want to get as infos in templates
     public informations: Object = {};
 
-    // List of templates that need to be translated
-    public templates: Array<any> = [];
-
-	constructor() {
+	constructor(language: Object = null) {
         super();
+        if(language) this.toObject(language);
         this.files = new FileService();
 	}
 
@@ -37,9 +34,10 @@ export class Language extends Module {
     		console.log('(Language %s) No dirname specified', this.name);
     		return false;
     	}
-        this.compilFiles(this.templates);
-        this.install();
-        this.status.translated = true;
+    	this.compilFiles(this.templates);
+    	this.deploy(() => {
+	        this.install();
+    	});
     }
 
 	public buildFromTemplate(dir: string, template: string, type: string = 'unique', data: any): boolean{
@@ -66,19 +64,19 @@ export class Language extends Module {
             infos: this.informations,
             project: this.project
         });
-        // console.log(balise);
+        this.status.translated = true;
 		return balise.content;
 	}
 
 	public compilFiles(f: Array<any>): void {
 		// deleteDirectory(this.output);
-		this.files.copyFolderRecursiveSync(this.dirname + '/template/.', this.output);
+		this.files.copyFolderRecursiveSync(this.dirname + '/.', this.output);
 		let models: Array<Model> = [];
 		for(let model in this.project.models){
 			models.push(this.project.models[model]);
 		}
 		for(let i = 0; i < f.length; i++) {
-			this.buildFromTemplate(this.dirname + '/template/', f[i].template, f[i].type, models);
+			this.buildFromTemplate(this.dirname + '/', f[i].template, f[i].type, models);
 		}
         this.status.compiled = true;
 		console.log('Files created.');
