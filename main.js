@@ -26,7 +26,8 @@ let createWindow = () => {
     'web-preferences': {
       'enable-drag-out': true, 
       'enable-drag-int': false 
-    }
+    },
+    frame: false
   });
 
   // and load the index.html of the app.

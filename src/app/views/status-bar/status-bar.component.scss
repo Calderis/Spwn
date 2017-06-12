@@ -1,0 +1,60 @@
+.status-bar{
+	height:40px;
+	position: fixed;
+	z-index:9999999;
+	width:100%;
+	display: block;
+	-webkit-user-select: none;
+  	-webkit-app-region: drag;
+	.menu_mac{
+		width:100px;
+		float:left;
+		display: inline-block;
+		ul.options{
+			padding: 14px;
+			margin:0;
+			li{
+				height:12px;
+				width:12px;
+				margin: 0px 4px;
+				padding:0;
+				display: inline-block;
+				button{
+					height:12px;
+					width:12px;
+					border-radius: 20px;
+					padding:0;
+					outline:none;
+					&:active{
+						opacity: 0.6;
+					}
+				}
+			}
+			li.close button {
+				background-color: #FF5F57;
+				border: 0.3px solid #E23E38;
+			}
+			li.reduce button {
+				background-color: #FFBD2E;
+				border: 0.3px solid #DFA023;
+			}
+			li.expand button {
+				background-color: #28CA42;
+				border: 0.3px solid #1BAC2C;
+			}
+		}
+	}
+	.menu_windows{
+		ul.options{
+			li.close{
+				//
+			}
+			li.reduce{
+				//
+			}
+			li.expand{
+				//
+			}
+		}
+	}
+}

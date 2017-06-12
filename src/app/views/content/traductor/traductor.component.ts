@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { StorageService } from '../../services/storage.service';
-import { Balise } from '../../class/balise';
-import { Model } from '../../class/model';
+import { StorageService } from '../../../services/storage.service';
+import { Balise } from '../../../class/balise';
+import { Model } from '../../../class/model';
 import { clipboard }  from 'electron';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Module } from '../../../class/module';
+import { Module } from '../../../../class/module';
 
 @Component({
   selector: 'module-details',

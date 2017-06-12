@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ProjectsComponent } from '../projects/projects.component';
-import { AuthService } from '../../services/auth.service';
-import { FileService } from '../../services/files.service';
-import { UserService } from '../../services/user.service';
-import { TemplateService } from '../../services/template.service';
-import { TerminalService } from '../../services/terminal.service';
+import { ProjectsComponent } from '../../projects/projects.component';
+import { AuthService } from '../../../services/auth.service';
+import { FileService } from '../../../services/files.service';
+import { UserService } from '../../../services/user.service';
+import { TemplateService } from '../../../services/template.service';
+import { TerminalService } from '../../../services/terminal.service';
 
-import { Template } from '../../class/template';
+import { Template } from '../../../class/template';
 
 import * as fs from 'fs';
 

@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { UserService } from '../../services/user.service';
-import { StorageService } from '../../services/storage.service';
+import { UserService } from '../../../services/user.service';
+import { StorageService } from '../../../services/storage.service';
 
-import { Project } from '../../class/project';
-import { User } from '../../class/user';
+import { Project } from '../../../class/project';
+import { User } from '../../../class/user';
 
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 

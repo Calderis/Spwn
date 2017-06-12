@@ -1,14 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Project } from '../../../class/project';
-import { Model } from '../../../class/model';
-import { User } from '../../../class/user';
-import { Language } from '../../../class/language';
+import { Project } from '../../../../class/project';
+import { Model } from '../../../../class/model';
+import { User } from '../../../../class/user';
+import { Language } from '../../../../class/language';
 
 import { ModuleDetailsComponent } from '../module-details/module-details.component';
-import { TemplateService } from '../../../services/template.service';
-import { FileService } from '../../../services/files.service';
-import { UserService } from '../../../services/user.service';
+import { TemplateService } from '../../../../services/template.service';
+import { FileService } from '../../../../services/files.service';
+import { UserService } from '../../../../services/user.service';
 
 import * as path from 'path';
 import * as fs from 'fs';

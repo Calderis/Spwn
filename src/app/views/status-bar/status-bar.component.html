@@ -1,0 +1,16 @@
+<div class="status-bar">
+  <div class="menu_mac" *ngIf="os == 'darwin'">
+    <ul class="options">
+      <li class="close"><button (click)="close()"></button></li>
+      <li class="reduce"><button (click)="minimize()"></button></li>
+      <li class="expand"><button (click)="maximize()"></button></li>
+    </ul>
+  </div>
+  <div class="menu_windows" *ngIf="os == 'windows_nt'">
+    <ul class="options">
+      <li class="close"><button (click)="close()"></button></li>
+      <li class="reduce"><button (click)="minimize()"></button></li>
+      <li class="expand"><button (click)="maximize()"></button></li>
+    </ul>
+  </div>
+</div>
