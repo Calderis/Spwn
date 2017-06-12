@@ -5,8 +5,8 @@
 <h4>Template</h4>
 <p>{{module.name}}</p>
 <p>{{module.dirname}}</p>
-<label for="port">Port</label>
-<input type="text" name="port" [(ngModel)]="module.port">
+<!-- <label for="port">Port</label>
+<input type="text" name="port" [(ngModel)]="module.project.port" disabled> -->
 <ul>
   <li *ngFor="let control of arrayOf(module.controls)">
     {{control.description}}

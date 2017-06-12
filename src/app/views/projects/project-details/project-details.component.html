@@ -37,6 +37,9 @@
   </div>
   <br>
 
+  <label for="port">Port</label>
+  <input type="text" name="port" [(ngModel)]="project.port" disabled>
+
   <button (click)="focusDirectory()">Build project</button>
   <input type="file" id="directory" placeholder="Build project" webkitdirectory directory (change)="build($event)" style="opacity: 0">
   <!-- project.build() -->

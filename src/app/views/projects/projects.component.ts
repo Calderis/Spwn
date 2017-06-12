@@ -37,6 +37,8 @@ export class ProjectsComponent implements OnInit {
     if (event.key === 'Enter') {
       // Create project
       let project = new Project(event.target.value);
+      project.setPort();
+      project.owner = this.session;
       this.session.projects.push(project);
       // Reset input value
       event.srcElement.value = '';

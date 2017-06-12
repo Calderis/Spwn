@@ -61,7 +61,6 @@ export class AuthService {
 	}
 
 	private saveLogguedUser(token: string, user: any): any{
-		console.log(user);
 		let newUser = new User(user);
 		let result = {token: token, user: newUser};
 		this.save(result);

@@ -10,9 +10,17 @@ export class Project {
 	public models: any = {};
 	public modules: Array<Language> = [];
 
+	public port: number = 0;
+
 	constructor(name: string, project: Object = null) {
 		if(project) this.toObject(project);
 		else this.name = name;
+	}
+
+	// Set random port between 1024 and 49151
+	public setPort(): void {
+		this.port = Math.floor(Math.random() * 49151) + 1024;
+		console.log(this.port);
 	}
 
 	// ————— MODELS —————
