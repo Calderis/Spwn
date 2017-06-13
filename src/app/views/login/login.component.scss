@@ -1,0 +1,107 @@
+/*styles for home content only*/
+$assets_path: "../../../assets/";
+@import './src/app/styles/_base';
+
+.login{
+	opacity: 0.93;
+	background-color: $white;
+	position: fixed;
+	height:100%;
+	width:100%;
+	z-index:9999998;
+	.popup{
+		width: 75%;
+		position: absolute; /* postulat de départ */
+		top: 50%; left: 50%; /* à 50%/50% du parent référent */
+		transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
+		box-shadow: 0 1px 16px 0 rgba(85,82,82,0.07);
+		border: 1px solid black;
+		.logo{
+			height: 72px;
+			width: 37px;
+			opacity: 0.8;
+			display: block;
+			margin: 30px auto 0;
+			background-color: red;
+		}
+		form{
+			width: 50%;
+			margin: auto;
+			display: block;
+			h1{
+				color: $dark-grey;
+				font-family: 'Circular Std';
+				font-size: 21px;
+				font-weight: 500;
+				line-height: 27px;
+				margin-bottom: 20px;
+			}
+			label{
+				color: $light-grey;
+				font-family: "Circular Std";
+				font-size: 14px;
+				font-weight: 300;
+				line-height: 18px;
+				display: block;
+				margin-bottom: 8px;
+			}
+			input{
+				padding: 12px 0;
+				width:100%;
+				display: block;
+				border: none;
+				outline: none;
+				color: $dark-grey;
+				font-family: "Circular Std";
+				font-size: 16px;
+				font-weight: 300;
+				line-height: 20px;
+				&::-webkit-input-placeholder{
+					font-family: "Circular Std";
+					font-size: 16px;
+					font-weight: 100;
+					line-height: 20px;
+					color: $light-grey;
+					opacity: 0.2;
+				}
+			}
+			.errors{
+				height:20px;
+				width:100%;
+				display: block;
+				margin-bottom: 20px;
+				p{
+					color: $red;
+					font-family: "Circular Std";
+					font-size: 12px;
+					font-weight: 300;
+					line-height: 15px;
+					opacity: 0;
+					transition: opacity 0.3s;
+					&.active{
+						opacity: 1;
+					}
+				}
+			}
+			button{
+				height: 50px;
+				width: 253px;
+				opacity: 0.18;
+				display: block;
+				border-radius: 8px;
+				background: linear-gradient(90deg, #3023AE 0%, #53A0FD 47.52%, #47D1DD 100%);
+				box-shadow: 0 13px 20px 0 #5189C9;
+				color: $white;
+				font-family: "Circular Std";
+				font-size: 16px;
+				font-weight: bold;
+				line-height: 20px;	text-align: center;
+				border:none;
+				margin: auto;
+				margin-bottom: 134px;
+				outline: none;
+				cursor: pointer;
+			}
+		}
+	}
+}

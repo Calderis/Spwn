@@ -1,3 +1,4 @@
+import { User } from './user';
 import { Model } from './model';
 import { Module } from './module';
 import { Language } from './language';
@@ -7,8 +8,14 @@ export class Project {
 	public name: string = '';
 	public image: string = '';
 	public directory: string = '';
+	public description: string = '';
 	public models: any = {};
+	public owner: User = null;
 	public modules: Array<Language> = [];
+
+	public projectDeployed: boolean = false;
+	public modelsDeployed: boolean = false;
+	public modulesDeployed: boolean = false;
 
 	public port: number = 0;
 
@@ -23,10 +30,22 @@ export class Project {
 		console.log(this.port);
 	}
 
+	// ————— VIEWS —————
+	public openProject(){
+		this.projectDeployed = !this.projectDeployed
+	}
+	public openModule(){
+		this.modulesDeployed = !this.modulesDeployed;
+	}
+	public openModel(){
+		this.modelsDeployed = !this.modelsDeployed
+	}
+
 	// ————— MODELS —————
-	public addModel(name: string): void{
+	public addModel(name: string): Model{
 		let model = new Model(name);
 		this.models[model.className] = model;
+		return this.models[model.className];
 	}
 	public deleteModel(model: Model): boolean{
 		delete this.models[model.className];
@@ -56,7 +75,7 @@ export class Project {
 			let model = this.models[m];
 			model = model.build();
 		}
-		if(directory){
+		if(directory === ''){
 			for(let i = 0; i < this.modules.length; i++) {
 				this.modules[i].setOutput(this.directory);
 				this.modules[i].build();
@@ -68,15 +87,6 @@ export class Project {
 		this.models = {};
 	}
 
-	public toObject(json: Object) {
-		this.name = json["name"];
-		let models = JSON.parse(json["models"]);
-		this.models = {};
-		for(let model in models){
-			this.models[models[model].name] = new Model(models[model].name);
-		}
-	}
-
 	// ————— EXPORT
 	public toJson() {
 		let json = {
@@ -84,6 +94,7 @@ export class Project {
 			name : this.name,
 			image : this.image,
 			directory : this.directory,
+			description : this.description,
 			models : [],
 			modules : []
 		};
@@ -102,6 +113,7 @@ export class Project {
 		this.name = json["name"];
 		this.image = json["image"];
 		this.directory = json["directory"];
+		this.description = json["description"];
 		this.models = [];
 		for(var i = 0; i < json["models"].length; i++){
 			let models = new Model('', json["models"][i]);

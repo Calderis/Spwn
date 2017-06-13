@@ -22,10 +22,11 @@ export class TerminalService {
 	}
 
 	public newChild(cmd: string, args: Array<string>, logs: boolean = true, options: any = null, next = () => {}): any{
+		let child;
 		if(options !== null){
-			let child = pty.spawn(cmd, args, options);
+			child = pty.spawn(cmd, args, options);
 		} else {
-			let child = pty.spawn(cmd, args);
+			child = pty.spawn(cmd, args);
 		}
 		
 		if(logs){
@@ -55,20 +56,14 @@ export class TerminalService {
 	private execDistantCommand(cmd: string, args: Array<string>, logs: boolean = true, options: any = {folder:''}, next: any = () => {}){
 		// cmd on remote VPS
 		// ssh root@vps421133.ovh.net "cd Yarn; npm run start"
-		args = args.toString();
-		args = args.replace(',', ' ');
-		let instruction = cmd + ' ' + args;
+		let argsArray = args.toString();
+		let instruction = cmd + ' ' + argsArray.replace(',', ' ');
 		let newArgs = ['root@vps421133.ovh.net', 'cd ' + options.folder + '; ' + instruction];
 		return this.newChild('ssh', newArgs, logs, null, next);
 	}
 
 	public stop(){
 		// this.child.kill('SIGHUP');;
-	}
-
-	public interact(action: string){
-		// '\r' for return
-		this.child.write(action);
 	}
 
 	// Generate RSA key
@@ -84,54 +79,54 @@ export class TerminalService {
 
 		let instruction = 'ssh-keygen';
 		let args = '-t rsa'.split(' ');
-		this.rsaQuest = this.newChild(instruction, args, false);
+		let rsaQuest = this.newChild(instruction, args, false);
 
-		this.rsaQuest.on('data', (data) => {
+		rsaQuest.on('data', (data) => {
 			let saveTheKey = new RegExp('Enter file in which to save the key', 'gi');
 			let passphrase = new RegExp(/Enter .* passphrase/, 'gi');
 			let overwrite = new RegExp('Overwrite (y/n)?', 'gi');
 			let savedPlace = new RegExp('Your identification has been saved in ', 'gi');
 
 			if(saveTheKey.test(data)){
-				this.rsaQuest.write('\r'); // Just accept whithout any other infos
+				rsaQuest.write('\r'); // Just accept whithout any other infos
 			} else if(overwrite.test(data)){
-				this.rsaQuest.write('y\r'); // Accept
+				rsaQuest.write('y\r'); // Accept
 			} else if(passphrase.test(data)){
-				this.rsaQuest.write('\r'); // Just accept whithout any other infos
+				rsaQuest.write('\r'); // Just accept whithout any other infos
 			} else if(savedPlace.test(data)){
 				keyPath = data.match(/.*id_rsa/)[0];
 				keyPath = keyPath.replace(savedPlace, '');
 			}
 		});
-		this.rsaQuest.on('exit', (code) => {
+		rsaQuest.on('exit', (code) => {
 			let instruction = 'ssh-copy-id';
 			let args = ('-i ' + keyPath + '.pub root@vps421133.ovh.net').split(' ');
-			this.rsaQuest = this.newChild(instruction, args, false);
+			rsaQuest = this.newChild(instruction, args, false);
 
-			this.rsaQuest.on('data', (data) => {
+			rsaQuest.on('data', (data) => {
 				let password = new RegExp('password:', 'gi');
 
 				if(password.test(data)){
-					this.rsaQuest.write('oO0Tus6W\r'); // Password for VPS
+					rsaQuest.write('oO0Tus6W\r'); // Password for VPS
 				}
 			});
 
-			this.rsaQuest.on('exit', (code) => {
+			rsaQuest.on('exit', (code) => {
 				let instruction = 'ssh';
 				let args = 'root@vps421133.ovh.net'.split(' ');
-				this.rsaQuest = this.newChild(instruction, args, false);
+				rsaQuest = this.newChild(instruction, args, false);
 
-				this.rsaQuest.on('data', (data) => {
+				rsaQuest.on('data', (data) => {
 					let sureToContinu = new RegExp('Are you sure you want to continue connecting (yes/no)?', 'gi');
 					let password = new RegExp('password:', 'gi');
 					let connexionSuccess = new RegExp('root@vps421133', 'gi');
 
 					if(sureToContinu.test(data)){
-						this.rsaQuest.write('yes\r'); // Accept
+						rsaQuest.write('yes\r'); // Accept
 					} else if(password.test(data)){
-						this.rsaQuest.write('oO0Tus6W\r'); // Password for VPS
+						rsaQuest.write('oO0Tus6W\r'); // Password for VPS
 					} else if(connexionSuccess.test(data)){
-						this.rsaQuest.kill();
+						rsaQuest.kill();
 						this.rsaRegistered = true;
 						next();
 					}

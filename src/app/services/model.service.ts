@@ -94,7 +94,7 @@ export class ModelService {
 		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public getModel(id: number): Observable<Model> {
+	public getModel(id: string): Observable<Model> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'models/' + id, this.options)
 		.map((res:Response) => new Model(res.json()) )

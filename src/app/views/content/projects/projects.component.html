@@ -1,15 +1,9 @@
 <p *ngIf="session != null">Welcome {{session.firstname}}</p>
 <div>
   <br>
-  
-  <div>
-    <label for="project_name">Create project</label>
-    <input id="project_name" (keyup)="createProject($event)">
-  </div>
-  
 
   <ul *ngIf="session != null">
-    <li *ngFor="let project of session.projects">
+    <li *ngFor="let project of session.user.projects">
     	<button (click)="projectSelected = project">Select {{project.name}}</button>
     </li>
   </ul>

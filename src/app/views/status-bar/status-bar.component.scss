@@ -1,3 +1,7 @@
+/*styles for home content only*/
+$assets_path: "../../../assets/";
+@import './src/app/styles/_base';
+
 .status-bar{
 	height:40px;
 	position: fixed;
@@ -43,6 +47,17 @@
 				border: 0.3px solid #1BAC2C;
 			}
 		}
+	}
+	.title{
+		color: $dark-grey;
+		font-family: "Circular Std";
+		font-size: 14px;
+		font-weight: 500;
+		line-height: 18px;
+		text-align: center;
+		position: absolute;
+		width:100%;
+		top: 12px;
 	}
 	.menu_windows{
 		ul.options{

@@ -1,5 +1,12 @@
 <div class="app">
-	<status-bar></status-bar>	
-	<sidebar></sidebar>	
-	<content></content>
+	<status-bar [session]="session" ></status-bar>	
+	<div *ngIf="session.user !== null">
+		<sidebar [session]="session"></sidebar>	
+		<content [session]="session"></content>
+	</div>
+	<login [session]="session" class="popup" *ngIf="session.user === null"></login>
+</div>
+
+<div class="update-notification" *ngIf="appUpdater != undefined && appUpdater.updateAvailable">
+  <button (click)="updateSoftware()">Update Software</button>
 </div>

@@ -14,8 +14,8 @@ export class User {
 	public stackoverflow: string = '';
 	public linkedin: string = '';
 	public level: string = '';
-	public projects: array = [];
-	public favoris: array = [];
+	public projects = [];
+	public favoris = [];
 
 	constructor(user: Object = null) {
 		if(user) this.toObject(user);
@@ -29,7 +29,7 @@ export class User {
 			lastname : this.lastname,
 			pseudo : this.pseudo,
 			email : this.email,
-			password : this.password,
+			// password : this.password,
 			image : this.image,
 			github : this.github,
 			stackoverflow : this.stackoverflow,

@@ -3,6 +3,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { StorageService } from './storage.service';
 
+import { Project } from '../class/project';
 import { Module } from '../class/module';
 
 // Import RxJs required methods
@@ -64,9 +65,9 @@ export class ModuleService {
 		let results = [];
 
 		for(let p in this.index) {
+			let project = new Project(p);
 			let module = this.storageService.get('module_' + p);
-			let moduleObject = new Module(p);
-			moduleObject.toObject(module);
+			let moduleObject = new Module(project, module);
 			results.push(moduleObject);
 		}
 
@@ -94,7 +95,7 @@ export class ModuleService {
 		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public getModule(id: number): Observable<Module> {
+	public getModule(id: string): Observable<Module> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'modules/' + id, this.options)
 		.map((res:Response) => new Module(res.json()) )

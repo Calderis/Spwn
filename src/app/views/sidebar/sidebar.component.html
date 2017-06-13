@@ -1,21 +1,24 @@
 <div class="sidebar">
 	<ul class="actions">
-		<li class="icon add">Create Project</li>
+		<li class="icon add" (click)="session.page='new-project'" [class.selected]="session.page == 'new-project'">Create Project</li>
 		<li class="icon folder">Read documentation</li>
 	</ul>
 	<h3 class="section-title">Projects</h3>
 	<div class="projects-tree">
 		<ul class="projects-list">
-			<li>
-				<h4>MyProject</h4>
-				<ul class="project-options">
-					<li>
-						<h5>Models</h5>
-						<ul class="option-list">
-							<li>User</li>
-							<li>Fruit</li>
-							<li>Panier</li>
-							<li>Panier</li>
+			<li class="project" *ngFor="let project of session.user.projects" (click)="session.project = project">
+				<h4 (click)="project.openProject()" [class.open]="project.projectDeployed">{{project.name}}</h4>
+				<ul class="project-options" *ngIf="project.projectDeployed">
+					<li class="option">
+						<h5 (click)="project.openModel(); session.page = 'models'" [class.active]="(session.project == project && session.page == 'models')">Models</h5>
+						<ul class="option-list" *ngIf="project.modelsDeployed">
+							<li *ngFor="let model of arrayOf(project.models)">{{model.name}}</li>
+						</ul>
+					</li>
+					<li class="option">
+						<h5 (click)="project.openModule()">Modules</h5>
+						<ul class="option-list" *ngIf="project.modulesDeployed">
+							<li *ngFor="let module of project.modules">{{module.name}}</li>
 						</ul>
 					</li>
 				</ul>

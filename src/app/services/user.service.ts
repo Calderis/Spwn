@@ -94,7 +94,7 @@ export class UserService {
 		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public getUser(id: number): Observable<User> {
+	public getUser(id: string): Observable<User> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'users/' + id, this.options)
 		.map((res:Response) => new User(res.json()) )
@@ -122,7 +122,7 @@ export class UserService {
 		})
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public getTemplates(id: number): Observable<Template> {
+	public getTemplates(id: string): Observable<Template[]> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'templates?owner=' + id, this.options)
 		.map((res:Response) => {

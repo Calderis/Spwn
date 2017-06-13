@@ -6,8 +6,9 @@ import { FileService } from '../services/files.service';
 export class Template {
 	public id: string = '';
 	public name: string = '';
+	public description: string = '';
 	public used: number = 0;
-	public owner: object = null;
+	public owner: any = null;
 	public stared: boolean = false;
 	public indexed: boolean = false;
 	public validated: boolean = false;
@@ -19,12 +20,14 @@ export class Template {
 
 	// ————— EXPORT
 	public toJson() {
+		let user = this.owner;
+		if(this.owner.toJson !== undefined) user = this.owner.toJson(false);
 		let json = {
 			_id : this.id,
 			name : this.name,
 			description : this.description,
 			used : this.used,
-			owner : this.owner.toJson(false),
+			owner : user,
 			stared : this.stared,
 			indexed : this.indexed,
 			validated : this.validated,

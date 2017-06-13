@@ -3,6 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Project } from '../../../../class/project';
 import { Model } from '../../../../class/model';
 import { User } from '../../../../class/user';
+import { Template } from '../../../../class/template';
 import { Language } from '../../../../class/language';
 
 import { ModuleDetailsComponent } from '../module-details/module-details.component';
@@ -25,8 +26,10 @@ import 'rxjs/Rx' ;
 export class ProjectDetailsComponent implements OnInit {
 
 	@Input() project: Project;
-	@Input() session: User;
+	@Input() session: any;
 	public show: boolean = false;
+	public templates: Array<Template> = [];
+	public ownTemplates: Array<Template> = [];
 
 	constructor(
 		private templateService: TemplateService,
@@ -35,7 +38,7 @@ export class ProjectDetailsComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.userService.getTemplates(this.session.id).subscribe(
+		this.userService.getTemplates(this.session.user.id).subscribe(
             results => {
               	this.ownTemplates = results;
             },
@@ -73,14 +76,14 @@ export class ProjectDetailsComponent implements OnInit {
 		document.getElementById("directory").click();
 	}
 
-	public build(ev: EventTarget){
+	public build(ev: any){
 		let eventObj: any = <MSInputMethodContext> event;
         let target: any = <HTMLInputElement> eventObj.target;
         let files: FileList = target.files;
 
         this.project.build(files[0].path);
 
-        this.userService.save(this.session);
+        this.userService.save(this.session.user);
 	}
 
 	// Create new project
@@ -105,9 +108,7 @@ export class ProjectDetailsComponent implements OnInit {
 						if (fs.existsSync(folderName)) {
 							this.filesService.deleteFolderRecursive(folderName);
 						}
-						fs.renameSync(defaultFolder, folderName, function(err) {
-						    if ( err ) console.log('ERROR: ' + err);
-						});
+						fs.renameSync(defaultFolder, folderName);
 						// Delete zip and default folder
 						this.filesService.deleteFile(folderPath, template.id + '.zip');
 						let infos = JSON.parse(fs.readFileSync(folderName + '/template.json', {encoding: 'utf8'}));

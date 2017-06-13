@@ -16,6 +16,6 @@ printf "${RED}Project Compilation \n${NC}"
 npm run build:prod
 
 printf "${RED}Build & Deploy on Github \n${NC}"
-node_modules/.bin/build -mwl -p always
+node_modules/.bin/build -m -p always
 
 printf "${RED}Done \n${NC}"

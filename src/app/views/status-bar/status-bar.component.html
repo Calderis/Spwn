@@ -6,6 +6,7 @@
       <li class="expand"><button (click)="maximize()"></button></li>
     </ul>
   </div>
+  <div class="title">{{session.page}}</div>
   <div class="menu_windows" *ngIf="os == 'windows_nt'">
     <ul class="options">
       <li class="close"><button (click)="close()"></button></li>

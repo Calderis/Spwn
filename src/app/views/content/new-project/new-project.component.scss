@@ -1,0 +1,115 @@
+/*styles for home content only*/
+$assets_path: "../../../../assets/";
+@import './src/app/styles/_base';
+
+.sheet{
+	width: 80%;
+	display: block;
+	position: absolute; /* postulat de départ */
+	top: 50%; left: 50%; /* à 50%/50% du parent référent */
+	transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
+	background-color:white;
+	border: 1px solid #D4D8DF;
+	padding: 60px 0;
+	form{
+		width: 50%;
+		position: relative;
+		display: block;
+		margin:auto;
+		h1{
+			color: $dark-grey;
+			font-family: "Circular Std";
+			font-size: 18px;
+			font-weight: 500;
+			line-height: 23px;
+			margin-bottom: 5px;
+		}
+		span.underline{
+			height: 2px;
+			background: linear-gradient(90deg, #857BE3 0%, #67A6F3 47.52%, #A3DFE4 100%);
+			width: 80%;
+			display: block;
+			margin: 9px 0;
+		}
+		.inputs{
+			overflow: auto;
+  			zoom: 1;
+  			margin: 30px 0;
+		}
+		label{
+			width:110px;
+			display: block;
+			float: left;
+			color: $dark-grey;
+			font-family: "Circular Std";
+			font-size: 14px;
+			font-weight: 300;
+			line-height: 18px;
+			padding-top:14px;
+			transition: color 0.3s;
+			&.error{
+				color: $red;
+			}
+		}
+		.input{
+			padding: 1px;
+			transition: background 0.3s;
+			background: #E5E7EB;
+			display: block;
+			float: right;
+			width: calc(100% - 140px);
+			input, textarea{
+				width: calc(100% - 21px);
+				max-width: calc(100% - 21px);
+				outline: none;
+				border:none;
+				color: $dark-grey;
+				font-family: "Circular Std";
+				font-size: 14px;
+				line-height: 22px;
+				padding: 13px 0 13px 21px;
+			}
+			textarea{
+				margin-bottom: -4px;
+			}
+			&.active, &:hover{
+				background: linear-gradient(90deg, #857BE3 0%, #67A6F3 47.52%, #A3DFE4 100%);
+			}
+			&.error{
+				background: $red;
+			}
+		}
+		h5{
+			color: $dark-grey;
+			font-family: "Circular Std";
+			font-size: 15px;
+			font-weight: 300;
+			line-height: 28px;
+		}
+		p{
+			opacity: 0.76;
+			color: $dark-grey;
+			font-family: "Circular Std";
+			font-size: 13px;
+			font-weight: 300;
+			line-height: 22px;
+			margin-bottom: 40px;
+		}
+		button{
+			padding: 12px 51px;
+			background: linear-gradient(90deg, #857BE3 0%, #67A6F3 47.52%, #A3DFE4 100%);
+			color: $white;
+			font-family: "Circular Std";
+			font-size: 15px;
+			line-height: 19px;
+			text-align: center;
+			border:none;
+			cursor: pointer;
+			outline: none;
+			transition: transform 0.3s;
+			&:active{
+				transform: scale(0.95);
+			}
+		}
+	}
+}

@@ -3,7 +3,7 @@ import { Param } from './param';
 export class Model {
 	public id: string = '';
 	public name: string = '';
-	public params: array = [];
+	public params: Array<any> = [];
 	public description: string = '';
 
 	public plurialName: string = '';
@@ -12,7 +12,7 @@ export class Model {
 
 	public json: string = ''; // Use for json input
 	public body: Object = {};
-	public array: Array<Params> = [];
+	public array = [];
 
 	constructor(name: string = '', model: Object = null) {
 		if(model) this.toObject(model);
@@ -40,21 +40,21 @@ export class Model {
 				let param = new Param();
 				param.name = index;
 
-				if(value === 'string'){
+				if(value === 'String'){
 					param.type = 'String';
-					param.classname = value;
-				} else if(value === 'boolean') {
+					param.classname = value.type;
+				} else if(value === 'Boolean') {
 					param.type = 'Boolean';
-					param.classname = value.model;
-				} else if(value === 'number') {
+					param.classname = value.type;
+				} else if(value === 'Number') {
 					param.type = 'Number';
-					param.classname = value.model;
+					param.classname = value.type;
 				} else if(value.length === undefined) {
 					param.type = 'Object';
-					param.classname = value.model;
+					param.classname = value.classname;
 				} else {
 					param.type = 'Array';
-					param.classname = value[0].model;
+					param.classname = value.classname;
 				}
 				
 			    this.params.push(param);
@@ -67,8 +67,9 @@ export class Model {
 	}
 
 	private normName(name: string): any{
-		if(name === undefined) let value = '';
-		else let value = name.toLowerCase();
+		let value = '';
+		if(name === undefined) value = '';
+		else value = name.toLowerCase();
 		let Value = value.charAt(0).toUpperCase() + value.slice(1);
 		return {
     		name: value,
@@ -89,6 +90,7 @@ export class Model {
 		let json = {};
 		for(var i = 0; i < this.params.length; i++){
 			let param = this.params[i];
+			console.log(param);
 			if(param.type === 'String' || param.type === 'Boolean' || param.type === 'Number'){
 				json[param.name] = param.type.toLowerCase();
 			} else if(param.type === 'Array'){
@@ -123,7 +125,8 @@ export class Model {
 		    }
 
 			obj.type = this.normName(value.type);
-			obj.class = this.normName(value.classname);
+			if(value.classname != undefined) { obj.class = this.normName(value.classname); }
+			else { obj.class = this.normName(value.type); }
 			
 		    this.array.push(obj);
 		}

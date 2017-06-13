@@ -12,9 +12,10 @@ export class StatusBarComponent implements OnInit {
 
   public os: string = '';
   public electron: ElectronService = null;
+  
+  @Input() session: any;
 
   constructor() {
-    this.title = 'Nom de mon projet - sRGB_profil.icc.sp';
     this.os = process.platform;
     this.electron = new ElectronService();
   }

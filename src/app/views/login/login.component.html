@@ -1,0 +1,21 @@
+<div class="login">
+  <div class="popup">
+    <div class="logo"></div>
+    <form (valid)="login()">
+      <h1>Log in</h1>
+      <label>Email</label>
+      <input type="text" name="email" [(ngModel)]="email" placeholder="| Your email">
+      <div class="errors">
+        <p [class.active]="badEmail">The email entered is invalid</p>
+        <p [class.active]="emptyEmail">Email can't be empty</p>
+      </div>
+      <label>Password</label>
+      <input type="password" name="password" [(ngModel)]="password" placeholder="| Your password">
+      <div class="errors">
+        <p [class.active]="emptyPassword">Password can't be empty</p>
+        <p [class.active]="badPassword">The password entered is invalid</p>
+      </div>
+      <button (click)="login()">Login</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<section class="left">
+	<h1>Models</h1>
+	<div class="inputs">
+      <label for="new_model">Model name</label>
+      <div class="input">
+        <div class="border" [class.active]="modelName != ''">
+        	<input id="new_model" name="name" [(ngModel)]="modelName" placeholder="Choose model name" (keyup)="createModel($event)">
+        </div>
+        <span class="tip">Press enter to validate and create new model</span>
+      </div>
+    </div>
+    <div class="models">
+    	<div class="model" *ngFor="let model of arrayOf(project.models)" (click)="selectedModel(model)">
+			<div class="options">
+				<h3>{{model.className}}</h3>
+				<div class="actions">
+					<!-- <button class="icon edit" (click)="addParam(model)"></button> -->
+					<button class="icon bin" (click)="project.deleteModel(model)"></button>
+				</div>
+			</div>
+			<div class="border space">
+				<ul class="params">
+					<li class="param" *ngFor="let param of model.params; let i = index">
+						<input class="name" placeholder="Add param" [(ngModel)]="param.name" (keyup)="checkParam(model)">
+						<span class="select" [class.opened]="selectedParam === param">
+							<button class="value" (click)="selectParam(param);">
+								<span [class.array]="param.type.className == 'Array'">{{model.array[i].class.className}}</span>
+								<span *ngIf="model.array[i].class.className == ''" class="placeholder">Select type</span>
+							</button>
+							<ul class="choices" [class.opened]="selectedParam === param">
+								<div *ngFor="let type of types">
+									<li *ngIf="type != 'Array' && type != 'Object'" (click)="editParamType(model, param, type)">
+									{{type}}
+									</li>
+									<li class="SubChoice" *ngIf="type == 'Array' || type == 'Object'">
+									{{type}}
+										<ul class="relativeClass">
+											<li *ngFor="let model of arrayOf(project.models)" (click)="editParamType(model, param, type, model.className)">{{model.className}}</li>
+										</ul>
+									</li>
+								</div>
+							</ul>
+						</span>
+						<button class="close" (click)="deleteParam(model, i)">x</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+    </div>
+	<button class="big-btn" (click)="checkAndSave()">Save models</button>
+</section>
+
+<!-- Models Preview -->
+<section class="right">
+	<header *ngIf="currentModel != null">
+		<h4><span class="bold">#{{currentModel.name}}</span> object JSON DATA preview</h4>
+	</header>
+	<div class="overview">
+		<textarea disabled>{{ currentModelJson }}</textarea>
+	</div>
+</section>

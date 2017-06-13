@@ -3,12 +3,18 @@ import { Template } from './template';
 import { FileService } from '../services/files.service';
 import { TerminalService } from '../services/terminal.service';
 import { Project } from './project';
+import { Language } from './language';
 
 
 export class Module {
 	public id: string = '';
 	public name: string = '';
+	public type: string = '';
 	public template: Template;
+	public templates: Array<any> = []; // List of templates that need to be translated
+
+	// List of informations you want to get as infos in templates
+    public informations: Object = {};
 
 	public fileService = null;
 	public dirname = '.';
@@ -16,7 +22,7 @@ export class Module {
 
 	public project: Project;
 	public port: number = 3000;
-	public process: Array<any> = [];
+	public process = [];
 
 	public online = false;
 
@@ -30,9 +36,9 @@ export class Module {
     }
 
     // Here are commands used to manage your project
-    public controls: Array<any> = [];
+    public controls = [];
     // Here are commands used to install your project
-    public installs: Array<any> = [];
+    public installs = [];
 
 	constructor(project: Project = null, module: Object = null) {
 		if(module) this.toObject(module);
@@ -60,13 +66,13 @@ export class Module {
 		if(this.type === 'API'){
 			if(!this.status.deployed){
 				// Create User folder
-				let args = this.project.owner.id;
+				let args = [this.project.owner.id];
 				this.terminal.newChildDistant('mkdir', args, false, { folder : '.' }, () => {
 					// Create project folder
-					let args = this.project.name;
+					let args = [this.project.name];
 					this.terminal.newChildDistant('mkdir', args, false, { folder : this.project.owner.id }, () => {
 						// Create module folder
-						let args = this.name;
+						let args = [this.name];
 						this.terminal.newChildDistant('mkdir', args, false, { folder : this.project.owner.id + '/' + this.project.name}, () => {
 							this.updateFiles(next);
 						});
@@ -91,7 +97,7 @@ export class Module {
 
 		let instruction = 'sh';
 		let args = ['-c', script]; // -c parameter to read script from string
-		this.rsaQuest = this.terminal.newChild(instruction, args, true, null, () => {
+		let child = this.terminal.newChild(instruction, args, true, null, () => {
 			console.log('Files uploaded with success');
 			this.status.deployed = true;
 
@@ -104,10 +110,11 @@ export class Module {
 
 	// Spawn command linked to project
 	public spawnCmd(instruction: string = "", args: Array<string> = [], next = () => {}, forceOnline: boolean = false) {
+		let cmd;
 		if(this.online || forceOnline){
-			let cmd = this.terminal.newChildDistant(instruction, args, false, { folder : this.project.owner.id + '/' + this.project.name + '/' + this.name });
+			cmd = this.terminal.newChildDistant(instruction, args, false, { folder : this.project.owner.id + '/' + this.project.name + '/' + this.name });
 		} else {
-			let cmd = this.terminal.newChild(instruction, args, false, { cwd : this.fileService.path.resolve(this.output) });
+			cmd = this.terminal.newChild(instruction, args, false, { cwd : this.fileService.path.resolve(this.output) });
 		}
 		let child = {
 			instruction: instruction,
@@ -151,7 +158,7 @@ export class Module {
 
 		return json;
 	}
-	public toObject(json: Object): Language {
+	public toObject(json: Object): Module {
 		if(json["_id"] != undefined) this.id = json["_id"];
 		if(json["id"] != undefined) this.id = json["id"];
 		this.name = json["name"];

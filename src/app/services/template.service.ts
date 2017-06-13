@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { StorageService } from './storage.service';
-import { FileService } from './file.service';
+import { FileService } from './files.service';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as $ from 'jquery';
@@ -101,7 +101,7 @@ export class TemplateService {
 		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public getTemplate(id: number): Observable<Template> {
+	public getTemplate(id: string): Observable<Template> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'templates/' + id, this.options)
 		.map((res:Response) => new Template(res.json()) )
@@ -119,7 +119,7 @@ export class TemplateService {
 		.map((res:Response) => new Template(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
-	public uploadTemplate(template: Template, file: string): Observable<Template> {
+	public uploadTemplate(template: Template, file: string): void {
 		let formData = new FormData();
 		formData.append('template', fs.createReadStream(file));
 
@@ -146,7 +146,7 @@ export class TemplateService {
 		// .map((res:Response) => res )
 		// .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public downloadTemplate(id: number): Observable<Template> {
+	public downloadTemplate(id: string): Observable<Template> {
 
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'templates/file/' + id, this.options)

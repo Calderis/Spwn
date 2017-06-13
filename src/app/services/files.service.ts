@@ -85,7 +85,7 @@ export class FileService {
 	  }
 	};
 
-	public deleteFile(dir, file): void {
+	public deleteFile(dir, file): Promise<{}> {
 	    return new Promise((resolve, reject) => {
 	        let filePath = path.join(dir, file);
 	        fs.lstat(filePath, (err, stats) => {
@@ -106,7 +106,7 @@ export class FileService {
 	    });
 	}
 
-	public deleteDirectory(dir): void {
+	public deleteDirectory(dir) {
 	    return new Promise((resolve, reject) => {
 	        fs.access(dir, (err) => {
 	            if (err) {

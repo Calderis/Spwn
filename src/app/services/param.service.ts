@@ -94,7 +94,7 @@ export class ParamService {
 		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public getParam(id: number): Observable<Param> {
+	public getParam(id: string): Observable<Param> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'params/' + id, this.options)
 		.map((res:Response) => new Param(res.json()) )

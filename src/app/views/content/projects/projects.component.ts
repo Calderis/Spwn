@@ -16,7 +16,7 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
 })
 export class ProjectsComponent implements OnInit {
 
-  @Input() session: User;
+  @Input() session: any;
   public projectSelected: Project = null;
 
   constructor(
@@ -29,27 +29,10 @@ export class ProjectsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // console.log('hello `Project` component');
-  }
-
-  // Create new project
-  public createProject(event: any) {
-    if (event.key === 'Enter') {
-      // Create project
-      let project = new Project(event.target.value);
-      project.setPort();
-      project.owner = this.session;
-      this.session.projects.push(project);
-      // Reset input value
-      event.srcElement.value = '';
-
-      return project;
-    }
-    return false;
   }
 
   public saveProject(project: Project): void{
-    project.build(false);
+    project.build('');
     this.userService.save(this.session);
   }
   public deleteProject(project: Project): void{

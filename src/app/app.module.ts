@@ -12,6 +12,9 @@ import { ModuleDetailsComponent } from './views/content/projects/module-details/
 import { SidebarComponent } from './views/sidebar/sidebar.component';
 import { StatusBarComponent } from './views/status-bar/status-bar.component';
 import { ContentComponent } from './views/content/content.component';
+import { LoginComponent } from './views/login/login.component';
+import { NewProjectComponent } from './views/content/new-project/new-project.component';
+import { ModelsComponent } from './views/content/models/models.component';
 
 import { AuthService } from './services/auth.service';
 import { ElectronService } from './services/electron.service';
@@ -35,6 +38,9 @@ import { Keyobject } from './pipes/keyObject';
     StatusBarComponent,
     SidebarComponent,
     ContentComponent,
+    LoginComponent,
+    ModelsComponent,
+    NewProjectComponent,
     Keyobject
   ],
   imports: [

@@ -4,15 +4,16 @@ import * as path from 'path';
 import { Project } from './project';
 import { Balise } from './balise';
 import { Module } from './module';
+import { Model } from './model';
 import { FileService } from '../services/files.service';
 
 export class Language extends Module {
 
 	public name: string = ''; // Name of your language
 	public type: string = ''; // Type of your language
-	public installs: Array<any> = [];
-	public controls: Array<any> = [];
-	public templates: Array<any> = []; // List of templates that need to be translated
+	public installs = [];
+	public controls = [];
+	public templates = []; // List of templates that need to be translated
 
 	private files: FileService = null;
 	public dirname: string = '.';
@@ -24,7 +25,7 @@ export class Language extends Module {
 
 	constructor(language: Object = null) {
         super();
-        if(language) this.toObject(language);
+        if(language) {this.toObject(language);}
         this.files = new FileService();
 	}
 
@@ -68,7 +69,7 @@ export class Language extends Module {
 		return balise.content;
 	}
 
-	public compilFiles(f: Array<any>): void {
+	public compilFiles(f): void {
 		// deleteDirectory(this.output);
 		this.files.copyFolderRecursiveSync(this.dirname + '/.', this.output);
 		let models: Array<Model> = [];
@@ -81,6 +82,4 @@ export class Language extends Module {
         this.status.compiled = true;
 		console.log('Files created.');
 	}
-
-	
 }

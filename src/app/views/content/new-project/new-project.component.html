@@ -1,0 +1,21 @@
+<div class="sheet">
+  <form (valid)="createProject()">
+    <h1>Create Project</h1>
+    <span class="underline"></span>
+    <div class="inputs">
+      <label for="project_name" [class.error]="error">Create project*</label>
+      <div class="input" [class.error]="error" [class.active]="projectName != ''">
+        <input id="project_name" [(ngModel)]="projectName" name="name" placeholder="Choose a project name">
+      </div>
+    </div>
+    <div class="inputs">
+      <label for="project_description">Description</label>
+      <div class="input" [class.active]="projectDescription != ''">
+        <textarea id="project_description" name="description" [(ngModel)]="projectDescription" placeholder="Leave side comments"></textarea>
+      </div>
+    </div>
+    <h5>Do you accepthe CGU of the project ?</h5>
+    <p>Private projects are only visible to you or anyone who has direct access to the repisitory acces to the project.</p>
+    <button (click)="createProject()">Start project</button>
+  </form>
+</div>

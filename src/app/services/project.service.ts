@@ -94,7 +94,7 @@ export class ProjectService {
 		} )
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	public getProject(id: number): Observable<Project> {
+	public getProject(id: string): Observable<Project> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'projects/' + id, this.options)
 		.map((res:Response) => new Project(res.json()) )

@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { User } from '../../class/user';
+
 @Component({
   selector: 'content',
   providers: [],
@@ -8,9 +10,11 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ContentComponent implements OnInit {
 
-  constructor() {
-  }
+	@Input() session: any;
 
-  ngOnInit() {
-  }
+	constructor() {
+	}
+
+	ngOnInit() {
+	}
 }

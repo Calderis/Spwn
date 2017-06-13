@@ -15,7 +15,8 @@ export class AuthService {
 	private baseUrl = 'http://151.80.141.50:4040/api/auth';
 	private headers = new Headers();
 	private options: RequestOptions;
-	public token: string = "";
+	public token: string = '';
+	public index: any = '';
 
 	private storageService: StorageService = new StorageService();
 
@@ -45,7 +46,7 @@ export class AuthService {
 		let standarName = user.id.replace(/\s/g, '_');
 		let result = this.storageService.get('auth_' + standarName);
 		let userData = this.storageService.get('user_' + standarName);
-		return {token: result.token, user: new User(userData)});
+		return {token: result.token, user: new User(userData)};
 	}
 
 	public load(): Array<User> {

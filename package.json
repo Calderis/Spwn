@@ -1,6 +1,6 @@
 {
   "name": "SPWN",
-  "version": "v0.1.0",
+  "version": "v0.2.0",
   "description": "Fingers In The Nose - Developping and managing project never have been this easier",
   "author": "Remi Wetteren <r.wetteren@gmail.com>",
   "repository": "https://github.com/Calderis/Spwn",
@@ -42,8 +42,8 @@
   ],
   "scripts": {
     "pack": "build --dir",
-    "dist": "build -mwl --x64 --ia32",
-    "publish": "build -mwl -p always",
+    "dist": "build -m --x64 --ia32",
+    "publish": "build -m -p always",
     "build:aot:prod": "npm run clean:dist && npm run clean:aot && webpack --config config/webpack.prod.js  --progress --profile --bail",
     "build:aot": "npm run build:aot:prod",
     "build:dev": "npm run clean:dist && webpack --config config/webpack.dev.js --progress --profile",
