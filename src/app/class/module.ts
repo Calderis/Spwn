@@ -5,6 +5,8 @@ import { TerminalService } from '../services/terminal.service';
 import { Project } from './project';
 import { Language } from './language';
 
+import { spawn } from 'child_process';
+
 
 export class Module {
 	public id: string = '';
@@ -31,8 +33,10 @@ export class Module {
 	public status: any = {
         translated: false,
         installed: false,
+        installedOnline: false,
         running: false,
-        deployed: false
+        deployed: false,
+        deployedOnline: false
     }
 
     // Here are commands used to manage your project
@@ -53,18 +57,31 @@ export class Module {
 	}
 
 	// Do all install commandes specified in the templates.
-	// Set online to true if you want them to be applied online
-	public install(online: boolean = false): void{
-		for(var i = 0; i < this.installs.length; i++){
-            this.spawnCmd(this.installs[i].command.cmd, this.installs[i].command.args, ()=>{}, online);
-        }
-        this.status.installed = true;
+	public install(forceOnline: boolean = false;): void{
+		console.log('instal. online mode : ', forceOnline);
+		this.nextInstall(this.installs, forceOnline);
+	}
+
+	public nextInstall(list, forceOnline:boolean, next = () => {}){
+		console.log(list);
+		if(list.length == 0){
+			console.log('list end');
+			if(forceOnline) { this.status.installedOnline = true; }
+			else { this.status.installed = true; }
+			next();
+			return true;
+		}
+		console.log(list[0].command.cmd, list[0].command.args]);
+		this.spawnCmd(list[0].command.cmd, list[0].command.args, ()=>{
+			list.shift();
+			this.nextInstall(list, forceOnline);
+        }, forceOnline);
 	}
 
 	// Upload files online
 	public deploy(next = () => {}): void{
 		if(this.type === 'API'){
-			if(!this.status.deployed){
+			if(!this.status.deployedOnline){
 				// Create User folder
 				let args = [this.project.owner.id];
 				this.terminal.newChildDistant('mkdir', args, false, { folder : '.' }, () => {
@@ -99,43 +116,62 @@ export class Module {
 		let args = ['-c', script]; // -c parameter to read script from string
 		let child = this.terminal.newChild(instruction, args, true, null, () => {
 			console.log('Files uploaded with success');
-			this.status.deployed = true;
+			this.status.deployedOnline = true;
 
 			// Install
 			this.install(true);
+
+			next();
 		});
 	}
 
 	public build(): void {} // See language.ts
 
 	// Spawn command linked to project
-	public spawnCmd(instruction: string = "", args: Array<string> = [], next = () => {}, forceOnline: boolean = false) {
+	public spawnCmd(instruction: string = "", args: Array<string> = [], next = () => {}, forceOnline: boolean = false, control: any) {
 		let cmd;
+		let option;
 		if(this.online || forceOnline){
-			cmd = this.terminal.newChildDistant(instruction, args, false, { folder : this.project.owner.id + '/' + this.project.name + '/' + this.name });
+			option = { folder : this.project.owner.id + '/' + this.project.name + '/' + this.name };
+			cmd = this.terminal.newChildDistant(instruction, args, false, option);
 		} else {
-			cmd = this.terminal.newChild(instruction, args, false, { cwd : this.fileService.path.resolve(this.output) });
+			option = { cwd: this.fileService.path.resolve(this.output) };
+			cmd = spawn(instruction, args, option);
 		}
 		let child = {
 			instruction: instruction,
 			args: args,
+			online: this.online,
+			option: option,
 			dir: this.fileService.path.resolve(this.output),
 			spawn: cmd,
 			running: true,
 			logs: ""
 		}
-		this.process.push(child);
+		if(control != undefined){
+			control.child = child;
+		}
 
-		cmd.on('data', (data) => {
-		  console.log(data.toString());
-		  child.logs += data.toString();
-		});
+		if(!this.online && !forceOnline){
+			cmd.stdout.on('data', (data) => {
+			  console.log(data.toString());
+			  child.logs += data.toString();
+			});
+
+			cmd.stderr.on('data', (data) => {
+			  console.log(`CMD STDERR: ${data}`);
+			});
+		} else {
+			cmd.on('data', (data) => {
+				console.log(data.toString());
+				child.logs += data.toString();
+			});
+		}
 
 		cmd.on('close', (code) => {
 		  if (code !== 0) {
 		    console.log(`CMD process exited with code ${code}`);
 		  }
-		  console.log(instruction, args);
 		  next();
 		});
 	}
@@ -177,8 +213,10 @@ export class Module {
 		if(this.status === undefined) this.status = {
 	        translated: false,
 	        installed: false,
+	        installedOnline: false,
 	        running: false,
-	        deployed: false
+	        deployed: false,
+	        deployedOnline: false
 	    };
 
 		let template = new Template(json["template"]);

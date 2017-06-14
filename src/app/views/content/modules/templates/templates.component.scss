@@ -1,0 +1,144 @@
+/*styles for home content only*/
+$assets_path: "../../../../../assets/";
+@import './src/app/styles/_base';
+
+
+h1{
+	color: $dark-grey;
+	font-family: "Circular Std";
+	font-size: 28px;
+	font-weight: 300;
+	line-height: 36px;
+	margin-bottom: 20px;
+}
+p.description{
+	color: $grey;
+	font-family: "Circular Std";
+	font-size: 13px;
+	font-weight: 300;
+	line-height: 22px;
+}
+.search{
+	margin-top: 17px;
+	margin-bottom: 24px;
+	height:36px;
+	width:100%;
+	display: block;
+	zoom: 1;
+	border: 1px solid #EDEDED;
+	overflow: hidden;
+	.icon{
+		height:36px;
+		width:36px;
+		float:left;
+		display: block;
+		background-size: 50% 50%;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-image: url($assets_path + 'icons/file.png');
+	}
+	input{
+		display: block;
+		float:right;
+		color: $dark-grey;
+		font-family: "Circular Std";
+		font-size: 15px;
+		font-weight: 300;
+		line-height: 20px;
+		outline: none;
+		border:none;
+		margin:0;
+		width: calc(100% - 40px);
+		height:36px;
+	}
+}
+.templatesResult{
+	ul{
+		display: block;
+		width: 100%;
+		padding:0;
+		margin-bottom: 22px;
+		li.template{
+			width: calc(33% - 4px);
+			background: #EDEDED;
+			margin-bottom: 11px;
+			display: inline-block;
+			cursor: pointer;
+			border-radius: 2px;
+			padding: 1px;
+			height: 65px;
+			.card{
+				background:white;				
+				padding: 8px 12px;
+				height: calc(100% - 16px);
+				h3{
+					color: $blue;
+					font-family: "Circular Std";
+					font-size: 15px;
+					line-height: 28px;
+				}
+				p{
+					color: $grey;
+					font-family: "Circular Std";
+					font-size: 13px;
+					line-height: 22px;
+				}
+			}
+			&:hover{
+				background: linear-gradient(90deg, #857BE3 0%, #67A6F3 47.52%, #A3DFE4 100%);
+			}
+		}
+	}
+}
+.separator{
+	.line{
+		background-color: #D8D8D8;
+		height:1px;
+		display: inline-block;
+		width: calc(50% - 40px);
+	}
+	p{
+		display: inline-block;
+		color: $grey;
+		font-family: "Circular Std";
+		font-size: 12px;
+		line-height: 14px;
+		width: 40px;
+		text-align: center;
+	}
+}
+.border-dropzone{
+		background: linear-gradient(90deg, #857BE3 0%, #67A6F3 47.52%, #A3DFE4 100%);
+		border-radius: 8px;
+		border: 1px dashed $white;
+		width: 100%;
+		margin-top: 18px;
+	.dropzone{
+		background-color: #f8fafe;
+		width: 100%;
+		text-align: center;
+		padding: 22px 0;
+		border-radius: 8px;
+		border: none;
+		cursor: pointer;
+		h3{
+			color: $dark-grey;
+			font-family: "Circular Std";
+			font-size: 18px;
+			font-weight: 500;
+			line-height: 23px;
+			text-align: center;
+		}
+		p{
+			color: #C8C8C8;
+			font-family: "Circular Std";
+			font-size: 14px;
+			font-weight: 300;
+			line-height: 21px;
+			text-align: center;
+		}
+	}
+}
+.importTemplateInput{
+	//
+}

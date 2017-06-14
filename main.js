@@ -21,6 +21,7 @@ let mainWindow, menu, dockMenu;
 let createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    transparent: true,
     width: 800,
     height: 600,
     'web-preferences': {

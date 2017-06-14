@@ -35,8 +35,10 @@ export class Language extends Module {
     		console.log('(Language %s) No dirname specified', this.name);
     		return false;
     	}
+    	console.log('compile files');
     	this.compilFiles(this.templates);
     	this.deploy(() => {
+    		console.log('Deploy');
 	        this.install();
     	});
     }
@@ -79,7 +81,7 @@ export class Language extends Module {
 		for(let i = 0; i < f.length; i++) {
 			this.buildFromTemplate(this.dirname + '/', f[i].template, f[i].type, models);
 		}
-        this.status.compiled = true;
+        this.status.deployed = true;
 		console.log('Files created.');
 	}
 }

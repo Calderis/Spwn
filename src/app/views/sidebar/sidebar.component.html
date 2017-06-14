@@ -1,7 +1,7 @@
 <div class="sidebar">
 	<ul class="actions">
 		<li class="icon add" (click)="session.page='new-project'" [class.selected]="session.page == 'new-project'">Create Project</li>
-		<li class="icon folder">Read documentation</li>
+		<!-- <li class="icon folder">Read documentation</li> -->
 	</ul>
 	<h3 class="section-title">Projects</h3>
 	<div class="projects-tree">
@@ -16,7 +16,7 @@
 						</ul>
 					</li>
 					<li class="option">
-						<h5 (click)="project.openModule()">Modules</h5>
+						<h5 (click)="project.openModule(); session.page = 'modules'" [class.active]="(session.project == project && session.page == 'modules')">Modules</h5>
 						<ul class="option-list" *ngIf="project.modulesDeployed">
 							<li *ngFor="let module of project.modules">{{module.name}}</li>
 						</ul>

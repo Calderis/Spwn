@@ -90,7 +90,6 @@ export class Model {
 		let json = {};
 		for(var i = 0; i < this.params.length; i++){
 			let param = this.params[i];
-			console.log(param);
 			if(param.type === 'String' || param.type === 'Boolean' || param.type === 'Number'){
 				json[param.name] = param.type.toLowerCase();
 			} else if(param.type === 'Array'){

@@ -27,7 +27,6 @@ export class Project {
 	// Set random port between 1024 and 49151
 	public setPort(): void {
 		this.port = Math.floor(Math.random() * 49151) + 1024;
-		console.log(this.port);
 	}
 
 	// ————— VIEWS —————
@@ -51,6 +50,19 @@ export class Project {
 		delete this.models[model.className];
 		return true;
 	}
+	public cleanModels(): void{
+		for(let m in this.models){
+			let model = this.models[m];
+			let length = model.params.length - 1;
+			for(var i = length; i > -1; i--){
+				console.log(model.params[i].name);
+				if(model.params[i].name == '') {
+					model.params.splice(i, 1);
+					model.array.splice(i, 1);
+				}
+			}
+		}
+	}
 
 	// ————— Modules —————
 	public addModule(language: Language): void{
@@ -69,13 +81,15 @@ export class Project {
 
 	// ————— PROJECT COMPILING
 	public build(directory: string) {
-		console.log('—————————————————————————————————————————————————— PROJECT BUILD', this);
+		console.log('—————————————————————————————————————————————————— PROJECT BUILD', directory, this);
+
+		this.cleanModels();
 		this.directory = directory;
 		for(let m in this.models){
 			let model = this.models[m];
 			model = model.build();
 		}
-		if(directory === ''){
+		if(directory !== ''){
 			for(let i = 0; i < this.modules.length; i++) {
 				this.modules[i].setOutput(this.directory);
 				this.modules[i].build();
@@ -93,6 +107,7 @@ export class Project {
 			_id : this.id,
 			name : this.name,
 			image : this.image,
+			port : this.port,
 			directory : this.directory,
 			description : this.description,
 			models : [],
@@ -112,6 +127,7 @@ export class Project {
 		if(json["id"] != undefined) this.id = json["id"];
 		this.name = json["name"];
 		this.image = json["image"];
+		this.port = json["port"];
 		this.directory = json["directory"];
 		this.description = json["description"];
 		this.models = [];

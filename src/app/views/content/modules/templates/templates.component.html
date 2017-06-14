@@ -1,0 +1,40 @@
+<h1>Add Module - Popular templates</h1>
+<p class="description">This library is 100% approuved by our developpers so that you can use them without having to check the code afterhand.</p>
+
+<div class="search">
+	<div class="icon"></div>
+	<input type="text" placeholder="Search templates">
+</div>
+<div class="templatesResult">
+	<ul>
+		<li class="template" *ngFor="let template of templates"  (click)="downloadTemplate(project, template)">
+			<div class="card">
+				<h3>{{template.name}}</h3>
+				<p>{{template.description}}</p>
+			</div>
+		</li>
+	</ul>
+</div>
+<h1>My templates</h1>
+<div class="templatesResult">
+	<ul>
+		<li class="template" *ngFor="let template of ownTemplates"  (click)="downloadTemplate(project, template)">
+			<div class="card">
+				<h3>{{template.name}}</h3>
+				<p>{{template.description}}</p>
+			</div>
+		</li>
+	</ul>
+</div>
+<div class="separator">
+	<span class="line"></span>
+	<p>or</p>
+	<span class="line"></span>
+</div>
+<div class="border-dropzone">
+	<div class="dropzone" (drop)="uploadTemplate($event)">
+		<h3>Upload your template or Drag & Drops</h3>
+		<p>microcopy something random</p>
+	</div>
+</div>
+<input type="file" hidden class="importTemplateInput">

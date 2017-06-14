@@ -29,6 +29,7 @@ export class ModelsComponent implements OnInit {
 
 	ngOnInit() {
 		this.project = this.session.project;
+		this.project.cleanModels();
 		for(let model in this.project.models){
 			this.addParam(this.project.models[model]);
 		}
@@ -146,17 +147,9 @@ export class ModelsComponent implements OnInit {
 
 	// ————— SAVE —————
 	public checkAndSave(): void{
-		for(let model in this.project.models){
-			for(var i = 0; i < this.project.models[model].params.length; i++){
-				if(this.project.models[model].params[i].name == '') {
-					this.deleteParam(this.project.models[model], i);
-				}
-			}
-		}
+		this.project.cleanModels();
 		this.userService.save(this.session.user);
-		for(let model in this.project.models){
-			this.addParam(this.project.models[model]);
-		}
+		this.session.page = 'modules';
 	}
 }
 

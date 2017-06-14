@@ -2,7 +2,7 @@
 
 	<!-- <div>
 		<h5>Upload templates</h5>
-		<div style="height: 100px; width:300px; border: 1px dashed black; cursor: pointer" (drop)="uploadTemplate($event)">
+		<div style="height: 100px; width:300px; border: 1px dashed black; cursor: pointer">
 
 		</div>
 	</div> -->
@@ -10,5 +10,6 @@
 	<projects [session]="session" *ngIf="session.page == 'projects'"></projects>
 	<new-project [session]="session" *ngIf="session.page == 'new-project'"></new-project>
 	<models [session]="session" *ngIf="session.page == 'models'"></models>
+	<modules [session]="session" *ngIf="session.page == 'modules'"></modules>
 
 </div>

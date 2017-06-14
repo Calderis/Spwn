@@ -16,9 +16,6 @@ export class SidebarComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.session.user.projects[0].openModel();
-		this.session.project = this.session.user.projects[0];
-		this.session.page = 'models';
 	}
 
   	public arrayOf(array: Array<Model>){
@@ -33,12 +30,12 @@ export class SidebarComponent implements OnInit {
 		project.projectDeployed = !project.projectDeployed
 		this.session.project = project;
 	}
-	public openModule(project: Project){
-		project.modulesDeployed = !project.modulesDeployed;
-		this.session.project = project;
-	}
 	public openModel(project: Project){
 		project.modelsDeployed = !project.modelsDeployed
+		this.session.project = project;
+	}
+	public openModule(project: Project){
+		project.modulesDeployed = !project.modulesDeployed;
 		this.session.project = project;
 	}
 }

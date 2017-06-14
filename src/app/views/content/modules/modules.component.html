@@ -1,12 +1,39 @@
 <section class="left">
-	<!--  -->
+	<h1 (click)="refresh(project)" id="project">{{project.name}} <span class="delete" (click)="deleteProject(project)">delete</span> </h1>
+
+	<div class="modules">
+		<p class="emptyList" *ngIf="project.modules.length == 0">You have 0 module now… Create one !</p>
+		<ul  *ngIf="project != null">
+			<li class="module"  *ngFor="let module of project.modules" (click)="currentModule = module">
+				<div class="button">
+					<span class="dot"></span>
+					<p class="infos">
+						<span class="name">{{module.name}}</span>
+						<span class="status" *ngIf="module.status.installed"> - Local</span>
+						<span class="status" *ngIf="module.status.installedOnline"> - Online</span>
+					</p>
+					<span class="icon delete" (click)="project.deleteModule(module)"></span>
+				</div>
+			</li>
+		</ul>
+		<button class="dropmodule">
+			<div class="section" (click)="currentModule = null">
+				<h4>Add module</h4>
+			</div>
+		</button>
+	</div>
+
+	<div class="build" *ngIf="!building">
+		<button class="big-btn" (click)="focusDirectory()">Build Project</button>
+  		<input type="file" id="directory" placeholder="Build project" webkitdirectory directory (change)="build($event)" style="opacity: 0">
+	</div>
+	<div class="wait" *ngIf="building">
+		<h3>Please wait until the deployement is finished</h3>
+		<div class="loading"></div>
+	</div>
 </section>
 
 <section class="right">
-	<!-- <header *ngIf="currentModel != null">
-		<h4><span class="bold">#{{currentModel.name}}</span> object JSON DATA preview</h4>
-	</header>
-	<div class="overview">
-		<textarea disabled>{{ currentModelJson }}</textarea>
-	</div> -->
+	<templates [session]="session" *ngIf="currentModule == null"></templates>
+	<module-details [session]="session" [module]="currentModule" *ngIf="currentModule != null"></module-details>
 </section>

@@ -24,7 +24,7 @@ export class TerminalService {
 	public newChild(cmd: string, args: Array<string>, logs: boolean = true, options: any = null, next = () => {}): any{
 		let child;
 		if(options !== null){
-			child = pty.spawn(cmd, args, options);
+			child = pty.spawn(cmd, args), options;
 		} else {
 			child = pty.spawn(cmd, args);
 		}
@@ -57,7 +57,7 @@ export class TerminalService {
 		// cmd on remote VPS
 		// ssh root@vps421133.ovh.net "cd Yarn; npm run start"
 		let argsArray = args.toString();
-		let instruction = cmd + ' ' + argsArray.replace(',', ' ');
+		let instruction = cmd + ' ' + argsArray.replace(/,/gi, ' ');
 		let newArgs = ['root@vps421133.ovh.net', 'cd ' + options.folder + '; ' + instruction];
 		return this.newChild('ssh', newArgs, logs, null, next);
 	}

@@ -117,7 +117,6 @@ export class UserService {
 		return this.http.put(this.baseUrl + 'users/' + user.id, user.toJson(), this.options)
 		.map((res:Response) => {
 			let user = new User(res.json());
-			console.log(user);
 			return user
 		})
 		.catch((error:any) => Observable.throw(error.json().error || 'Server error'));

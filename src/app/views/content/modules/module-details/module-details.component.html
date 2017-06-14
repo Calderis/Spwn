@@ -1,0 +1,43 @@
+<div class="onlineStatus" *ngIf="module.status.installed && module.status.installedOnline">
+  <p *ngIf="module.online">Online</p>
+  <p *ngIf="!module.online">Local</p>
+  <div class="border">
+    <button class="online" (click)="module.online = !module.online">Switch</button>
+  </div>
+</div>
+<div *ngIf="module.status.installed && module.status.installedOnline">
+  <h1>
+    <input type="text" name="name" [(ngModel)]="module.name">
+  </h1>
+  <h2>Port: <input type="text" disabled [(ngModel)]="project.port"> </h2>
+  <h3>Local directory</h3>
+  <input class="path" [(ngModel)]="project.directory" disabled>
+</div>
+
+<div class="wait" *ngIf="!module.status.installed || !module.status.installedOnline">
+  <h3>Please wait until the deployement is finished</h3>
+  <div class="loading"></div>
+</div>
+
+<ul class="commands" *ngIf="module.status.installed && module.status.installedOnline">
+  <li class="command" *ngFor="let control of arrayOf(envControls(module.online))" [class.active]="control.expand">
+    <div class="instruction">
+      <div class="border">
+        <button class="cmd" (click)="startProcess(control)">{{control.name}}</button>
+      </div>
+      <span class="description">{{control.description}}</span>
+    </div>
+    <div class="terminal" *ngIf="control.active" [class.active]="control.expand">
+      <div class="logs">
+        <span *ngIf="control.child != null">
+          {{control.child.logs}}
+        </span>
+      </div>
+      <div class="actions">
+        <button class="stop" (click)="killProcess(control)">STOP</button>
+        <button class="open-close" *ngIf="!control.expand" (click)="openConsole(control)">OPEN</button>
+        <button class="open-close" *ngIf="control.expand" (click)="closeConsole(control)">CLOSE</button>
+      </div>
+    </div>
+  </li>
+</ul>

@@ -53,7 +53,6 @@ export class FileService {
 	    //check if folder needs to be created or integrated
 	    let targetFolder = path.join( target, path.basename( source ) );
 	    if ( !fs.existsSync( targetFolder ) ) {
-	    	console.log('Create folder', targetFolder);
 	        fs.mkdirSync( targetFolder );
 	    }
 

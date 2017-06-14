@@ -25,6 +25,12 @@ $assets_path: "../../../assets/";
 			font-weight: 100;
 			transition: color 0.3s;
 			&.icon{
+				&.add:before{
+					background-image: url($assets_path + 'icons/new.png');
+				}
+				&.folder:before{
+					//
+				}
 				&:before{
 					content:"";
 					height:14px;
@@ -33,13 +39,9 @@ $assets_path: "../../../assets/";
 					position: absolute;
 					left:10px;
 					top:2px ;
-					background-color:red;
-					&.add{
-						//
-					}
-					&.folder{
-						//
-					}
+					background-size: contain;
+					background-repeat: no-repeat;
+					background-position: center;
 				}
 			}
 			&.selected{
@@ -82,7 +84,10 @@ $assets_path: "../../../assets/";
 						display: block;
 						height: 4.67px;
 						width: 8px;
-						background-color: red;
+						background-size: contain;
+						background-repeat: no-repeat;
+						background-position: center;
+						background-image: url($assets_path + 'icons/down.png');
 						transform: rotateZ(-90deg);
 						transition: transform 0.3s;
 					}

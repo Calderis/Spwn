@@ -94,16 +94,23 @@ section{
 				float: right;
 				button{
 					border: none;
-					background: red;
 					height:13px;
 					width:13px;
+					background: none;
 					display: inline-block;
 					margin-left: 15px;
 					cursor: pointer;
 					outline: none;
+					background-size: contain;
+					background-repeat: no-repeat;
+					background-position: center;
 					&.icon{
-						&.edit{}
-						&.bin{}
+						&.edit{
+							background-image: url($assets_path + 'icons/parameter.png');
+						}
+						&.bin{
+							background-image: url($assets_path + 'icons/delete.png');
+						}
 					}
 				}
 			}

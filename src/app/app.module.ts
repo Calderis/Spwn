@@ -8,13 +8,15 @@ import { HomeComponent } from './views/content/home/home.component';
 import { TraductorComponent } from './views/content/traductor/traductor.component';
 import { ProjectsComponent } from './views/content/projects/projects.component';
 import { ProjectDetailsComponent } from './views/content/projects/project-details/project-details.component';
-import { ModuleDetailsComponent } from './views/content/projects/module-details/module-details.component';
 import { SidebarComponent } from './views/sidebar/sidebar.component';
 import { StatusBarComponent } from './views/status-bar/status-bar.component';
 import { ContentComponent } from './views/content/content.component';
 import { LoginComponent } from './views/login/login.component';
 import { NewProjectComponent } from './views/content/new-project/new-project.component';
 import { ModelsComponent } from './views/content/models/models.component';
+import { ModulesComponent } from './views/content/modules/modules.component';
+import { TemplatesComponent } from './views/content/modules/templates/templates.component';
+import { ModuleDetailsComponent } from './views/content/modules/module-details/module-details.component';
 
 import { AuthService } from './services/auth.service';
 import { ElectronService } from './services/electron.service';
@@ -40,6 +42,8 @@ import { Keyobject } from './pipes/keyObject';
     ContentComponent,
     LoginComponent,
     ModelsComponent,
+    ModulesComponent,
+    TemplatesComponent,
     NewProjectComponent,
     Keyobject
   ],
