@@ -111,14 +111,6 @@ const ngcWebpack = require('ngc-webpack');
           loader: 'node-loader'
         },
         {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel',
-        query: {
-          presets: ['es2015']
-        }
-      },
-        {
           test: /\.ts$/,
           use: [
           {
