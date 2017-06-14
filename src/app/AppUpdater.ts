@@ -27,6 +27,10 @@ export default class AppUpdater {
     console.log(this.version);
 
     this.autoUpdater = require('electron').remote.require('electron-updater').autoUpdater;
+    // this.autoUpdater.setFeedURL({
+    //    token: '3a9b8d483610d90c549dc30fbc5242c8a3b9c104',
+    //    repo: 'https://github.com/Calderis/Spwn/releases'
+    // })
 
     console.log('autoUpdater', this.autoUpdater);
     this.autoUpdater.autoDownload = false;
