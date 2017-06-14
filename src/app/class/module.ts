@@ -1,12 +1,11 @@
 import { spawn } from 'child_process';
-import { Template } from './template';
+
 import { FileService } from '../services/files.service';
 import { TerminalService } from '../services/terminal.service';
+
+import { Template } from './template';
 import { Project } from './project';
 import { Language } from './language';
-
-import { spawn } from 'child_process';
-
 
 export class Module {
 	public id: string = '';
@@ -57,7 +56,7 @@ export class Module {
 	}
 
 	// Do all install commandes specified in the templates.
-	public install(forceOnline: boolean = false;): void{
+	public install(forceOnline: boolean = false): void{
 		console.log('instal. online mode : ', forceOnline);
 		this.nextInstall(this.installs, forceOnline);
 	}
@@ -71,11 +70,10 @@ export class Module {
 			next();
 			return true;
 		}
-		console.log(list[0].command.cmd, list[0].command.args]);
 		this.spawnCmd(list[0].command.cmd, list[0].command.args, ()=>{
 			list.shift();
 			this.nextInstall(list, forceOnline);
-        }, forceOnline);
+        }, forceOnline, {});
 	}
 
 	// Upload files online

@@ -77,7 +77,7 @@ const ngcWebpack = require('ngc-webpack');
        *
        * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
        */
-       extensions: ['.ts', '.js', '.json'],
+       extensions: ['.ts', '.js', '.json', '.node'],
 
       // An array of directory names to be resolved to the current directory
       modules: [helpers.root('src'), helpers.root('node_modules')],
@@ -110,6 +110,14 @@ const ngcWebpack = require('ngc-webpack');
           test: /\.node$/,
           loader: 'node-loader'
         },
+        {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel',
+        query: {
+          presets: ['es2015']
+        }
+      },
         {
           test: /\.ts$/,
           use: [

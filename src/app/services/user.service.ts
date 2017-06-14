@@ -16,7 +16,7 @@ export class UserService {
 	private baseUrl = 'http://151.80.141.50:4040/api/';
 	private headers = new Headers();
 	private options: RequestOptions;
-	public token: string = "";
+	public token: string = '';
 
 	private index: Object = {};
 	private storageService: StorageService = new StorageService();
@@ -75,14 +75,14 @@ export class UserService {
 
 	private setHeader(): any {
 		this.headers = new Headers();
-		this.token = this.storageService.get("token");
+		this.token = this.storageService.get('token');
 		this.headers.append('Accept', 'application/json');
 		this.headers.append('Authorization', 'Bearer ' + this.token );
 		this.options = new RequestOptions({ headers: this.headers });
 	}
 
 	// ————— CRUD —————
-	public getUsers(page: number = 1, limit: number = 10, params: string = ""): Observable<any> {
+	public getUsers(page: number = 1, limit: number = 10, params: string = ''): Observable<any> {
 		this.setHeader();
 		return this.http.get(this.baseUrl + 'users?include=photos,active=0,1,2&page=' + page + '&limit=' + limit + params, this.options)
 		.map((res:Response) => {

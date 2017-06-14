@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Module } from '../../../../class/module';
+import { Project } from '../../../../class/project';
+import { Model } from '../../../../class/model';
 import { Template } from '../../../../class/template';
 import { User } from '../../../../class/user';
 

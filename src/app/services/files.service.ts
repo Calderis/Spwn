@@ -3,7 +3,7 @@ import * as electron from 'electron';
 import * as fs from 'fs';
 import * as url from 'url';
 import * as http from 'http';
-import { exec, spawn } from 'child_process';
+import { spawn } from 'child_process';
 import * as path from 'path';
 import * as archiver from 'archiver';
 

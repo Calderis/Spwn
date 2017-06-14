@@ -112,9 +112,7 @@ export class TemplatesComponent implements OnInit {
 				if (fs.existsSync(folderName)) {
 					this.fileService.deleteFolderRecursive(folderName);
 				}
-				fs.renameSync(defaultFolder, folderName, function(err) {
-				    if ( err ) console.log('ERROR: ' + err);
-				});
+				fs.renameSync(defaultFolder, folderName);
 				// Delete zip and default folder
 				this.fileService.deleteFile(folderPath, template.id + '.zip');
 				let infos = JSON.parse(fs.readFileSync(folderName + '/template.json', {encoding: 'utf8'}));

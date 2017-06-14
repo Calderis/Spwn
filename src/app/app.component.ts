@@ -4,6 +4,7 @@ import AppUpdater from './AppUpdater';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 
+import { Template } from './class/template';
 import { User } from './class/user';
 
 @Component({
@@ -39,8 +40,6 @@ export class AppComponent implements OnInit {
 		setTimeout(() => {
 			this.notif.update = this.appUpdater.updateAvailable;
 		}, 5000);
-
-		console.log('');
 
 		let sessions = this.authService.load();
 		if(sessions.length > 0) {

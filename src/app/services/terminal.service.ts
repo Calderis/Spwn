@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
+
 import * as electron from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as pty from 'pty.js';
 import * as os from 'os';
+
 import { FileService } from './files.service';
 
 @Injectable()

@@ -8,7 +8,7 @@ rm -rf ../Coloris\ 2\ -\ Compiled/
 mkdir ../Coloris\ 2\ -\ Compiled
 
 printf "${NC}STEP 1 : ${RED}Project Compilation \n${NC}"
-npm run build:prod
+npm run build:dev
 
 printf "${NC}STEP 2 : ${RED}App building \n${NC}"
 npm run dist --project dist

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Project } from '../../class/project';
+import { Model } from '../../class/model';
 
 @Component({
   selector: 'sidebar',

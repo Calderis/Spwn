@@ -11,7 +11,6 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
  */
  const DefinePlugin = require('webpack/lib/DefinePlugin');
  const ExtractTextPlugin = require('extract-text-webpack-plugin');
- const IgnorePlugin = require('webpack/lib/IgnorePlugin');
  const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
  const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
  const ProvidePlugin = require('webpack/lib/ProvidePlugin');
@@ -112,7 +111,7 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
             use: 'css-loader!sass-loader'
           }),
           include: [helpers.root('src', 'styles')]
-        },
+        }
 
         ]
 
@@ -164,13 +163,13 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
         }
       }),
 
-      /**
+      *
        * Plugin: UglifyJsPlugin
        * Description: Minimize all JavaScript output of chunks.
        * Loaders are switched into minimizing mode.
        *
        * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
-       */
+       
       // NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
       new UglifyJsPlugin({
         // beautify: true, //debug

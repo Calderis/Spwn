@@ -80,7 +80,7 @@ export class Project {
 	}
 
 	// ————— PROJECT COMPILING
-	public build(directory: string) {
+	public build(directory: any) {
 		console.log('—————————————————————————————————————————————————— PROJECT BUILD', directory, this);
 
 		this.cleanModels();

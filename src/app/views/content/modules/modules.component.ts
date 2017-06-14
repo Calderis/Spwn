@@ -50,10 +50,8 @@ export class ModulesComponent implements OnInit {
 		document.getElementById("directory").click();
 	}
 
-	public build(ev: any){
-		let eventObj: any = <MSInputMethodContext> event;
-        let target: any = <HTMLInputElement> eventObj.target;
-        let files: FileList = target.files;
+	public build(event: any){
+        let files: FileList = event.srcElement.files;
 
         for(var i = 0; i < this.project.modules.length; i++){
 			this.project.modules[i].status.installed = false;;

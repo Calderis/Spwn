@@ -6,7 +6,6 @@ import { User } from '../../class/user';
 
 @Component({
   selector: 'login',
-  providers: [],
   styleUrls: [ './login.component.scss' ],
   templateUrl: './login.component.html',
   providers: [AuthService, UserService]
@@ -14,7 +13,11 @@ import { User } from '../../class/user';
 export class LoginComponent implements OnInit {
 
   @Input() session: any;
+  public email: string = '';
+  public password: string = '';
+
   public emptyEmail: boolean = false;
+  public badEmail: boolean = false;
   public badPassword: boolean = false;
   public emptyPassword: boolean = false;
 
@@ -38,16 +41,16 @@ export class LoginComponent implements OnInit {
         let badEmail = new RegExp('Bad email', 'gi');
         let badPassword = new RegExp('Bad password', 'gi');
         let emptyPassword = new RegExp('password" is not allowed to be empty', 'gi');
-        if(emptyEmail.test(error.message)) this.emptyEmail = true;
+        if(emptyEmail.test(err.message)) this.emptyEmail = true;
         else this.emptyEmail = false;
 
-        if(badEmail.test(error.message)) this.badEmail = true;
+        if(badEmail.test(err.message)) this.badEmail = true;
         else this.badEmail = false;
 
-        if(badPassword.test(error.message)) this.badPassword = true;
+        if(badPassword.test(err.message)) this.badPassword = true;
         else this.badPassword = false;
 
-        if(emptyPassword.test(error.message)) this.emptyPassword = true;
+        if(emptyPassword.test(err.message)) this.emptyPassword = true;
         else this.emptyPassword = false;
 
       });

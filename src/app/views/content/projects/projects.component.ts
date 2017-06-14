@@ -6,7 +6,6 @@ import { StorageService } from '../../../services/storage.service';
 import { Project } from '../../../class/project';
 import { User } from '../../../class/user';
 
-import { ProjectDetailsComponent } from './project-details/project-details.component';
 
 @Component({
   selector: 'projects',
