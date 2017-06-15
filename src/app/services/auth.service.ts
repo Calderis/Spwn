@@ -49,7 +49,7 @@ export class AuthService {
 		return {token: result.token, user: new User(userData)};
 	}
 
-	public load(): Array<User> {
+	public load(): Array<any> {
 		let results = [];
 
 		for(let p in this.index) {

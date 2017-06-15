@@ -32,14 +32,14 @@ export class ProjectsComponent implements OnInit {
 
   public saveProject(project: Project): void{
     project.build('');
-    this.userService.save(this.session);
+    this.userService.save(this.session.user);
   }
   public deleteProject(project: Project): void{
     for(var i = 0; i < this.session.projects.length; i++){
       if(this.session.projects[i] === project) this.session.projects.splice(i, 1);
     }
     this.projectSelected = null;
-    this.userService.save(this.session);
+    this.userService.save(this.session.user);
   }
 
 }

@@ -31,7 +31,7 @@ export class ModulesComponent implements OnInit {
 	// ————— PROJECT —————
 	public saveProject(project: Project): void{
 		project.build(false);
-		this.userService.save(this.session);
+		this.userService.save(this.session.user);
 	}
 	public deleteProject(project: Project): void{
 		for(var i = 0; i < this.session.user.projects.length; i++){

@@ -11,7 +11,7 @@ import { FileService } from '../../../../services/files.service';
 
 import * as path from 'path';
 import * as fs from 'fs';
-import * as unzip from 'unzip-stream';
+import * as extract from 'extract-zip';
 
 import 'rxjs/Rx' ;
 
@@ -102,12 +102,9 @@ export class TemplatesComponent implements OnInit {
 	public downloadTemplate(project: Project, template: Template): void{
 		this.fileService.download('http://151.80.141.50:4040/api/templates/file/' + template.id, '/template/', (folderPath) =>{
 			console.log(folderPath + template.id + '.zip');
-			fs.createReadStream(folderPath + template.id + '.zip')
-				.pipe(unzip.Extract({ path: folderPath }))
-				.on('end', () => {})
-				.on('error', e => console.log('error',e));
-			setTimeout(() => {
-				// Rename /template folder get after extracting to template id
+
+			extract(folderPath + template.id + '.zip', {dir: folderPath}, (err) => {
+			 	// Rename /template folder get after extracting to template id
 				let defaultFolder = path.resolve(folderPath + '/template');
 				let folderName = path.resolve(folderPath + '/' + template.id);
 				// If template has already been downloaded, we delete it (the previous version)
@@ -124,7 +121,7 @@ export class TemplatesComponent implements OnInit {
 				language.dirname = folderName;
 				project.addModule(language);
 				document.getElementById("project").click();
-			}, 1000);
+			});
 		});
 	}
 }

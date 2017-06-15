@@ -12,33 +12,33 @@
     "importHelpers": true,
     "strictNullChecks": false,
     "lib": [
-    "dom",
-    "es6"
+        "dom",
+        "es6"
     ],
     "typeRoots": [
-    "node_modules/@types"
+        "node_modules/@types"
     ],
     "types": [
-    "hammerjs",
-    "jasmine",
-    "node",
-    "source-map",
-    "uglify-js",
-    "webpack"
+        "hammerjs",
+        "jasmine",
+        "node",
+        "source-map",
+        "uglify-js",
+        "webpack"
     ]
     },
     "exclude": [
-    "node_modules",
-    "dist"
+        "node_modules",
+        "dist"
     ],
     "include": [
-    "node_modules/@types/*/*.d.ts",
-    "node_modules/electron-updater/out/*.ts"
+        "node_modules/@types/*/*.d.ts",
+        "node_modules/electron-updater/out/*.ts"
     ],
     "awesomeTypescriptLoaderOptions": {
       "forkChecker": true,
       "useWebpackText": true
-      },
+    },
       "compileOnSave": false,
       "buildOnSave": false,
       "atom": {
