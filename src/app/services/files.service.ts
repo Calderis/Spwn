@@ -137,6 +137,7 @@ export class FileService {
 	// }
 	// Return path to Zip file
 	public createArchive(name: string, content: any, next: any){
+		console.log('Create archive', name, content);
 		let dirname = path.resolve(electron.remote.app.getPath('userData') + '/files/');
 		var output = fs.createWriteStream(dirname + '/' + name + '.zip');
 		var archive = archiver('zip', {
@@ -152,6 +153,7 @@ export class FileService {
 
 		// good practice to catch this error explicitly
 		archive.on('error', function(err) {
+			console.log(err);
 		  throw err;
 		});
 

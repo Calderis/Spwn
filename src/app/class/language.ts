@@ -44,7 +44,7 @@ export class Language extends Module {
     }
 
 	public buildFromTemplate(dir: string, template: string, type: string = 'unique', data: any): boolean{
-		// console.log('————————————————— %s ———————————————————', template);
+		console.log('————————————————— %s ———————————————————', template);
 		if(type === 'multiple') {
 			for(let d in data) {
 				let file = data[d].plurialName + '.' + template.split('.').pop();

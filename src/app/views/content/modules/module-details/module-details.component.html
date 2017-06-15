@@ -1,11 +1,11 @@
-<div class="onlineStatus" *ngIf="module.status.installed && module.status.installedOnline">
+<div class="onlineStatus" *ngIf="loadingDone(module)">
   <p *ngIf="module.online">Online</p>
   <p *ngIf="!module.online">Local</p>
   <div class="border">
     <button class="online" (click)="module.online = !module.online">Switch</button>
   </div>
 </div>
-<div *ngIf="module.status.installed && module.status.installedOnline">
+<div *ngIf="loadingDone(module)">
   <h1>
     <input type="text" name="name" [(ngModel)]="module.name">
   </h1>
@@ -14,12 +14,12 @@
   <input class="path" [(ngModel)]="project.directory" disabled>
 </div>
 
-<div class="wait" *ngIf="!module.status.installed || !module.status.installedOnline">
+<div class="wait" *ngIf="!loadingDone(module)">
   <h3>Please wait until the deployement is finished</h3>
   <div class="loading"></div>
 </div>
 
-<ul class="commands" *ngIf="module.status.installed && module.status.installedOnline">
+<ul class="commands" *ngIf="loadingDone(module)">
   <li class="command" *ngFor="let control of arrayOf(envControls(module.online))" [class.active]="control.expand">
     <div class="instruction">
       <div class="border">

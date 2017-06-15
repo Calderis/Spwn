@@ -29,6 +29,7 @@ $assets_path: "../../../assets/";
 					border-radius: 20px;
 					padding:0;
 					outline:none;
+					cursor: pointer;
 					&:active{
 						opacity: 0.6;
 					}
@@ -56,7 +57,8 @@ $assets_path: "../../../assets/";
 		line-height: 18px;
 		text-align: center;
 		position: absolute;
-		width:100%;
+		width: calc(100% - 300px);
+		left: 150px;
 		top: 12px;
 	}
 	.menu_windows{

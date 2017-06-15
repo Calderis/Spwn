@@ -12,9 +12,9 @@ export class Balise {
 		this.body = body;
 		this.data = data;
 
-		// console.log("type", type);
-		// console.log("body", body);
-		// console.log("data", data);
+		console.log("type", type);
+		console.log("body", body);
+		console.log("data", data);
 
 		switch( this.type ) {
 			default:
@@ -51,12 +51,12 @@ export class Balise {
 			}
 			loopNumber--;
 
-			let loopsZone = code.match(new RegExp('^\\s*(<§-)((.*\\n)+?(\\s)*(<-§->)){' + loopNumber + '}((.*\\n)+?(\\s)*(<-§->))', 'gm')) || [];
-			if(loopsZone[0] == undefined) break;
-
-			let balise = new Balise('loop', loopsZone[0], data);
-			this.childs.push(balise);
-			code = code.replace(loopsZone[0], balise.content);
+			let loopsZone = code.match(new RegExp('\\s*(<§-)((.*\\n)+?(\\s)*(<-§->)){' + loopNumber + '}((.*\\n)+?(\\s)*(<-§->))', 'gm')) || [];
+			if(loopsZone != null) {
+				let balise = new Balise('loop', loopsZone[0], data);
+				this.childs.push(balise);
+				code = code.replace(loopsZone[0], balise.content);
+			}
 		}
 
 		// Detect Ifs
@@ -76,7 +76,7 @@ export class Balise {
 			}
 			ifNumber--;
 
-			let ifsZone = code.match(new RegExp('^\\s*(<§!)((.*\\n)+?(\\s)*(<!§!>)){' + ifNumber + '}((.*\\n)+?(\\s)*(<!§!>))', 'gm')) || [];
+			let ifsZone = code.match(new RegExp('\\s*(<§!)((.*\\n)+?(\\s)*(<!§!>)){' + ifNumber + '}((.*\\n)+?(\\s)*(<!§!>))', 'gm')) || [];
 			if(ifsZone[0] == undefined) break;
 
 			let balise = new Balise('if', ifsZone[0], data);

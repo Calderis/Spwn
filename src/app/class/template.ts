@@ -7,6 +7,7 @@ export class Template {
 	public id: string = '';
 	public name: string = '';
 	public description: string = '';
+	public type: string = '';
 	public used: number = 0;
 	public owner: any = null;
 	public stared: boolean = false;
@@ -26,6 +27,7 @@ export class Template {
 			_id : this.id,
 			name : this.name,
 			description : this.description,
+			type : this.type,
 			used : this.used,
 			owner : user,
 			stared : this.stared,
@@ -41,6 +43,7 @@ export class Template {
 		if(json["id"] != undefined) this.id = json["id"];
 		this.name = json["name"];
 		this.description = json["description"];
+		this.type = json["type"];
 		this.used = json["used"];
 	  	let owner = new User(json["owner"]);
 		this.owner = owner;

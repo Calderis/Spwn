@@ -18,6 +18,7 @@ export class Project {
 	public modulesDeployed: boolean = false;
 
 	public port: number = 0;
+	public url: string = 'http://151.80.141.50';
 
 	constructor(name: string, project: Object = null) {
 		if(project) this.toObject(project);

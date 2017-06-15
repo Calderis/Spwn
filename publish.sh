@@ -13,6 +13,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 printf "${RED}Project Compilation \n${NC}"
+./node_modules/.bin/electron-rebuild
 npm run build:prod
 
 printf "${RED}Build & Deploy on Github \n${NC}"

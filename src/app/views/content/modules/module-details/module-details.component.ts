@@ -42,6 +42,19 @@ export class ModuleDetailsComponent implements OnInit {
 		}
 	}
 
+	public loadingDone(module: Module): boolean{
+		if(module.template.type == 'API'){
+			if(module.status.installed && module.status.installedOnline){
+				return true;
+			}
+		} else {
+			if(module.status.installed){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	// ————— CONTROLS —————
 	public buildControlList(): void{
 		for(let ctrl in this.module.controls){

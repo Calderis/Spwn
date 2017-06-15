@@ -58,7 +58,8 @@ export class Module {
 	// Do all install commandes specified in the templates.
 	public install(forceOnline: boolean = false): void{
 		console.log('instal. online mode : ', forceOnline);
-		this.nextInstall(this.installs, forceOnline);
+		let listInstallJson  = JSON.stringify(this.installs);
+		this.nextInstall(JSON.parse(listInstallJson), forceOnline);
 	}
 
 	public nextInstall(list, forceOnline:boolean, next = () => {}){

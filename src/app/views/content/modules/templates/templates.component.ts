@@ -62,6 +62,7 @@ export class TemplatesComponent implements OnInit {
 	      console.log(files[key]);
 	      if(fs.lstatSync(files[key].path).isDirectory()) {
 	      	let template = new Template();
+	      	console.log(template);
 	    	this.addArchive(template, files[key], this.session.user);
 
 	    	templatesList.push(template);
@@ -79,6 +80,7 @@ export class TemplatesComponent implements OnInit {
 		template.toObject({
 			name : infos.name,
 			description : infos.description,
+			type : infos.type,
 			used : 0,
 			owner : owner,
 			stared : false,
