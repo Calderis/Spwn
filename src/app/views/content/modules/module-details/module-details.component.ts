@@ -43,14 +43,19 @@ export class ModuleDetailsComponent implements OnInit {
 	}
 
 	public loadingDone(module: Module): boolean{
-		if(module.template.type == 'API'){
-			if(module.status.installedOnline){
-				return true;
-			}
-		} else {
-			if(module.status.installed){
-				return true;
-			}
+		// console.log(module.status);
+		// console.log(module.template.type);
+		// if(module.template.type == 'API'){
+		// 	if(module.status.installedOnline){
+		// 		return true;
+		// 	}
+		// } else {
+		// 	if(module.status.installed){
+		// 		return true;
+		// 	}
+		// }
+		if(module.status.installedOnline){
+			return true;
 		}
 		return false;
 	}
