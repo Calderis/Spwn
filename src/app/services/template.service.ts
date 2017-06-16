@@ -119,7 +119,7 @@ export class TemplateService {
 		.map((res:Response) => new Template(res.json()) )
 		.catch((error:any) => Observable.throw(error || 'Server error'));
 	}
-	public uploadTemplate(template: Template, file: string): void {
+	public uploadTemplate(template: Template, file: string, next =  () => {}): void {
 		let formData = new FormData();
 		formData.append('template', fs.createReadStream(file));
 
@@ -140,6 +140,7 @@ export class TemplateService {
 
 		request.on('response', function(res) {
 		  console.log(res);
+		  next();
 		});
 
 		// return this.http.post(this.baseUrl + 'templates/file', formData, this.options)

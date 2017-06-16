@@ -92,7 +92,15 @@ export class TemplatesComponent implements OnInit {
 		this.templateService.createTemplate(template).subscribe(
             template => {
             	this.fileService.createArchive(template.id, {files: [], folders: [folder]}, (zipPath) => {
-	            	this.templateService.uploadTemplate(template, zipPath);
+	            	this.templateService.uploadTemplate(template, zipPath, () => {
+	            		this.userService.getTemplates(this.session.user.id).subscribe(
+				            results => {
+				              	this.ownTemplates = results;
+				              	document.getElementById("project").click();
+				            },
+				            err => console.log(err)
+				            );
+	            	});
             	});
             }, err => console.log(err));
 	}
